@@ -2,7 +2,7 @@
 name: Dev-log
 about: Dev-log
 title: ''
-labels: documentation
+labels: documentation, error
 assignees: ''
 
 ---
