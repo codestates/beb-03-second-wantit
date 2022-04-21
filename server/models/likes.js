@@ -21,8 +21,16 @@ module.exports = (sequelize, DataTypes) => {
   }
   Likes.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       user_id: DataTypes.INTEGER,
       post_id: DataTypes.INTEGER,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
     },
     {
       sequelize,
