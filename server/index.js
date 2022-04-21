@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const usersRouter = require("./router/usersRouter.js");
 const postRouter = require("./router/postRouter.js");
+require("dotenv").config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -23,3 +24,4 @@ app.use("/post", postRouter);
 
 server = app.listen(4000);
 console.log("http server runnning!!");
+console.log(process.env.DATABASE_PASSWORD);
