@@ -9,11 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Comments.belongsTo(models.User, {
+      Likes.belongsTo(models.Users, {
         foreignKey: { name: "user_id", allowNull: false },
         onDelete: "CASCADE",
       });
-      Comments.belongsTo(models.Post, {
+      Likes.belongsTo(models.Posts, {
         foreignKey: { name: "post_id", allowNull: false },
         onDelete: "CASCADE",
       });
