@@ -4,7 +4,7 @@ const { login, signup, findById } = require("../controller/usersController");
 
 router.post("/login", login);
 
-// router.post("/signup", signup);
+router.post("/signup", signup);
 
 router.get("/:userid", findById);
 
