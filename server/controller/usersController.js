@@ -2,8 +2,8 @@ const { Users } = require("../models");
 const lightwallet = require("eth-lightwallet");
 
 module.exports = {
+  //로그인 핸들러
   login: async (req, res) => {
-    console.log(req.body);
     const user = await Users.findOne({
       where: { user_id: req.body.user_id, password: req.body.password },
     });
@@ -15,8 +15,8 @@ module.exports = {
     }
   },
 
+  //회원가입 핸들러
   signup: async (req, res) => {
-    // 포스트맨에서 userName, password를 넣으면
     let reqUserId, reqPassword;
     reqUserId = req.body.userId;
     reqPassword = req.body.password;
@@ -78,6 +78,7 @@ module.exports = {
     });
   },
 
+  //회원정보 조회 핸들러
   findById: async (req, res) => {
     // 보여줄 정보: 내가 작성한 글, 댓글, (좋아요)
     const user = await Users.findOne({ where: { user_id: req.query.user_id } });
