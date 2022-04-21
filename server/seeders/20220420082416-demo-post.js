@@ -2,13 +2,6 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    /*
-    id
-title
-body
-createdAt
-user_id
-    */
     return queryInterface.bulkInsert("Posts", [
       {
         title: "첫 번째 글",
