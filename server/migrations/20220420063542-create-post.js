@@ -18,6 +18,10 @@ module.exports = {
         allowNull: true,
         type: Sequelize.DATE,
       },
+      updatedAt: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
       user_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
