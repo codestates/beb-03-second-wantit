@@ -3,16 +3,17 @@ const { Users, Posts, Likes } = require("../models");
 module.exports = {
 	// 좋아요 추가 핸들러
 	like: async (req, res) => {
-		const { user_id, post_id } = req.body;
+		const id = req.params.id;
+		const { user_id } = req.body;
 		try {
 			const liked = await Likes.findOrCreate({
 				where: {
 					user_id: user_id,
-					post_id: post_id,
+					post_id: id,
 				},
 				defaults: {
 					user_id: user_id,
-					post_id: post_id,
+					post_id: id,
 				},
 			});
 			if (liked) {
@@ -27,14 +28,15 @@ module.exports = {
 	},
 	// 좋아요 취소 핸들러
 	deleteLike: async (req, res) => {
-		const { user_id, post_id } = req.body;
+		const id = req.params.id;
+		const { user_id } = req.body;
 		const deleted = await Likes.destroy({
 			include: [
 				{
 					model: Posts,
 					attributes: ["id"],
 					where: {
-						id: post_id,
+						id: id,
 					},
 				},
 				{
@@ -47,7 +49,7 @@ module.exports = {
 			],
 			where: {
 				user_id: user_id,
-				post_id: post_id,
+				post_id: id,
 			},
 		});
 		try {
