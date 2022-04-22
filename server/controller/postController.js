@@ -15,7 +15,7 @@ module.exports = {
       if (writepost) {
         res.status(201).send({ message: "Success write post" });
       } else {
-        res.status(400).send({ message: "no" });
+        res.status(400).send({ message: "Failed to write Post" });
       }
     } catch (e) {
       res.status(500).send({ message: "Failed to write Post" });
