@@ -1,8 +1,6 @@
 const { Posts, Likes } = require("../models");
 
 module.exports = {
-  like: (req, res) => {},
-  deleteLike: (req, res) => {},
   // 좋아요 추가 핸들러
   like: async (req, res) => {
     const { user_id, post_id } = req.body;
