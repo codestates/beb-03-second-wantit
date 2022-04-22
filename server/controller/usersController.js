@@ -4,14 +4,20 @@ const lightwallet = require("eth-lightwallet");
 module.exports = {
 	//로그인 핸들러
 	login: async (req, res) => {
+		const { user_id, password } = req.body;
 		const user = await Users.findOne({
-			where: { user_id: req.body.user_id, password: req.body.password },
+			attributes: ["id", "user_id", "address"],
+			where: { user_id: user_id, password: password },
 		});
-		if (!user) {
-			res.status(400).send({ data: null, message: "not registered" });
-		} else {
-			// FIXME: data에 담아 줄 요소
-			res.status(200).send({ data: user, message: "login" });
+		try {
+			if (!user) {
+				res.status(400).send({ data: null, message: "not registered" });
+			} else {
+				res.status(200).send({ data: user, message: "login" });
+			}
+		} catch (e) {
+			res.status(500).send({ message: "Failed to login" });
+			console.error(e);
 		}
 	},
 
@@ -81,13 +87,20 @@ module.exports = {
 	//회원정보 조회 핸들러
 	findById: async (req, res) => {
 		// 보여줄 정보: 내가 작성한 글, 댓글
-		const user = await Users.findOne({ where: { user_id: req.query.user_id } });
-		if (!user) {
-			res.status(400).send({ data: null, message: "You're not logged in" });
-		} else {
-			const posts = await user.getPosts({});
-			const comments = await user.getComments({});
-			res.status(200).send({ data: { posts, comments }, message: "login" });
+		const user = await Users.findOne({
+			where: { user_id: req.query.user_id },
+		});
+		try {
+			if (!user) {
+				res.status(400).send({ data: null, message: "You're not logged in" });
+			} else {
+				const posts = await user.getPosts({});
+				const comments = await user.getComments({});
+				res.status(200).send({ data: { posts, comments }, message: "login" });
+			}
+		} catch (e) {
+			res.status(500).send({ message: "Failed to find userInfo" });
+			console.error(e);
 		}
 	},
 };
