@@ -10,15 +10,15 @@ module.exports = {
     let keystore = await lightwallet.keystore.deserialize(wallet);
     let address = await keystore.getAddresses();
 
-    keystore.keyFromPassword("2", function (err, pwDerivedKey) {
-      privateKey = keystore.exportPrivateKey(...address, pwDerivedKey);
-    });
-    console.log(
-      web3.eth.accounts.wallet.add({
-        privateKey: privateKey,
-        address: address[0],
-      })
-    );
+    // keystore.keyFromPassword("2", function (err, pwDerivedKey) {
+    //   privateKey = keystore.exportPrivateKey(...address, pwDerivedKey);
+    // });
+    // console.log(
+    //   web3.eth.accounts.wallet.add({
+    //     privateKey: privateKey,
+    //     address: address[0],
+    //   })
+    // );
 
     //   //web3.eth.accounts.signTransaction;
     //   //web3.eth.sendSignedTransaction;
