@@ -4,6 +4,8 @@ const { Users } = require("../models");
 const dotenv = require("dotenv");
 dotenv.config();
 const env = process.env;
+const { abi } = require("../erc-20/abi");
+const { bytecode } = require("../erc-20/bytecode");
 
 module.exports = {
   //서버 계정에 1이더 보내는 핸들러
@@ -77,9 +79,78 @@ module.exports = {
       const eth = web3.utils.fromWei(balance, "ether");
       res
         .status(200)
-        .send({ message: "getBalance Success", balance: eth + " 이더" });
+        .send({ message: "getBalance Success", balance: eth + " eth" });
     } else {
       res.status(500).send({ message: "getBalance Failed" });
+    }
+  },
+
+  //컨트랙트 배포 핸들러
+  deploy: async (req, res) => {
+    //DB에서 admin 계정 address,privateKey 조회
+    const admin = await Users.findOne({
+      attributes: ["address", "privateKey"],
+      where: { user_id: "admin" },
+    });
+
+    //abi코드로 새로운 컨트랙트 객체 생성
+    const tokenContract = await new web3.eth.Contract(abi);
+    //바이트코드로 컨트랙트 배포
+    const deployContract = await tokenContract.deploy({
+      data: "0x" + bytecode.object,
+    });
+    //배포하고자 하는 address의 privateKey로 서명
+    const createTransaction = await web3.eth.accounts.signTransaction(
+      {
+        from: admin.dataValues.address,
+        data: deployContract.encodeABI(),
+        gas: 2000000,
+      },
+      admin.dataValues.privateKey
+    );
+
+    //서명한 트랜잭션 보내기
+    const createReceipt = await web3.eth.sendSignedTransaction(
+      createTransaction.rawTransaction
+    );
+
+    if (createReceipt) {
+      res.status(200).send({
+        message: "Success deploy contract",
+        contractaddress: createReceipt.contractAddress,
+      });
+    } else {
+      res.status(502).send({ message: "Error: deploy contract Faield" });
+    }
+  },
+
+  //토큰 갯수 조회 핸들러(user_id와 컨트랙트주소를 받아서 조회)
+  balanceOf: async (req, res) => {
+    const user_id = req.body.user_id;
+    const contractAddress = req.body.contractAddress;
+    //DB에서 admin 계정 address,privateKey 조회
+    const admin = await Users.findOne({
+      attributes: ["address"],
+      where: { user_id: user_id },
+    });
+
+    //abi코드로 새로운 컨트랙트 객체 생성
+    const tokenContract = await new web3.eth.Contract(abi, contractAddress);
+    //method call로 잔액 조회
+    const balanceof = await tokenContract.methods
+      .balanceOf(admin.dataValues.address)
+      .call();
+
+    //잔액이 0이 아니라면
+    if (balanceof) {
+      res.status(200).send({
+        message: "Success get balance wantit token",
+        balance: balanceof,
+      });
+    } else {
+      res
+        .status(501)
+        .send({ message: "Error: get balance wantit token Failed" });
     }
   },
 };
