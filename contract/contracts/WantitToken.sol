@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.10;
 
 interface ERC20Interface {
@@ -14,6 +14,30 @@ interface ERC20Interface {
     event Approval(address indexed owner, address indexed spender, uint256 oldAmount, uint256 amount);
 }
 
+library SafeMath {
+  	function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+		uint256 c = a * b;
+		assert(a == 0 || c / a == b);
+		return c;
+  	}
+
+  	function div(uint256 a, uint256 b) internal pure returns (uint256) {
+	    uint256 c = a / b;
+		return c;
+  	}
+
+  	function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+		assert(b <= a);
+		return a - b;
+  	}
+
+  	function add(uint256 a, uint256 b) internal pure returns (uint256) {
+		uint256 c = a + b;
+		assert(c >= a);
+		return c;
+	}
+}
+
 abstract contract OwnerHelper {
   	address private _owner;
 
@@ -25,22 +49,25 @@ abstract contract OwnerHelper {
   	}
 
   	constructor() {
-		_owner = msg.sender;
+            _owner = msg.sender;
   	}
 
-  	function owner() public view virtual returns (address) {
-		return _owner;
-  	}
+       function owner() public view virtual returns (address) {
+           return _owner;
+       }
 
   	function transferOwnership(address newOwner) onlyOwner public {
-		require(newOwner != _owner);
-		require(newOwner != address(0x0));
-		_owner = newOwner;
-		emit OwnershipTransferred(_owner, newOwner);
+            require(newOwner != _owner);
+            require(newOwner != address(0x0));
+            address preOwner = _owner;
+    	    _owner = newOwner;
+    	    emit OwnershipTransferred(preOwner, newOwner);
   	}
 }
 
-contract WantitToken is ERC20Interface {
+contract WantitToken is ERC20Interface, OwnerHelper {
+    using SafeMath for uint256;
+
     mapping (address => uint256) private _balances;
     mapping (address => mapping (address => uint256)) public _allowances;
 
@@ -48,13 +75,16 @@ contract WantitToken is ERC20Interface {
     string public _name;
     string public _symbol;
     uint8 public _decimals;
-    uint private E18 = 1000000000000000000;
+    bool public _tokenLock;
+    mapping (address => bool) public _personalTokenLock;
 
     constructor() {
         _name = "WantitToken";
         _symbol = "WT";
         _decimals = 18;
-        _totalSupply = 100000000 * E18;
+        _totalSupply = 100000000e18;
+        _balances[msg.sender] = _totalSupply;
+        _tokenLock = true;
     }
 
     function name() public view returns (string memory) {
@@ -94,7 +124,7 @@ contract WantitToken is ERC20Interface {
         return true;
     }
 
-    function transferFrom(address sender, address recipient, uint256 amount) external virtual override returns (bool) {
+     function transferFrom(address sender, address recipient, uint256 amount) external virtual override returns (bool) {
         _transfer(sender, recipient, amount);
         emit Transfer(msg.sender, sender, recipient, amount);
         uint256 currentAllowance = _allowances[sender][msg.sender];
@@ -106,10 +136,11 @@ contract WantitToken is ERC20Interface {
     function _transfer(address sender, address recipient, uint256 amount) internal virtual {
         require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
+        require(isTokenLock(sender, recipient) == false, "TokenLock: invalid token transfer");
         uint256 senderBalance = _balances[sender];
         require(senderBalance >= amount, "ERC20: transfer amount exceeds balance");
-        _balances[sender] = senderBalance - amount;
-        _balances[recipient] += amount;
+        _balances[sender] = senderBalance.sub(amount);
+        _balances[recipient] = _balances[recipient].add(amount);
     }
 
     function _approve(address owner, address spender, uint256 currentAmount, uint256 amount) internal virtual {
@@ -118,5 +149,30 @@ contract WantitToken is ERC20Interface {
         require(currentAmount == _allowances[owner][spender], "ERC20: invalid currentAmount");
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, currentAmount, amount);
+    }
+
+    function isTokenLock(address from, address to) public view returns (bool lock) {
+        lock = false;
+
+        if(_tokenLock == true)
+        {
+             lock = true;
+        }
+
+        if(_personalTokenLock[from] == true || _personalTokenLock[to] == true) {
+             lock = true;
+        }
+    }
+
+    // 다음의 코드에서 함수로 전달되는 파라미터 브라켓 뒤에 오는 onlyOwner가 예시입니다.
+    function removeTokenLock() onlyOwner public {
+        require(_tokenLock == true);
+        _tokenLock = false;
+    }
+
+    // 다음의 코드에서 함수로 전달되는 파라미터 브라켓 뒤에 오는 onlyOwner가 예시입니다.
+    function removePersonalTokenLock(address _who) onlyOwner public {
+        require(_personalTokenLock[_who] == true);
+        _personalTokenLock[_who] = false;
     }
 }
