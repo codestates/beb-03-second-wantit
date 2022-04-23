@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { faucet } = require("../controller/contractController");
+const { faucet, getBalance } = require("../controller/contractController");
 
 router.post("/ethFaucet", faucet);
+router.get("/getBalance", getBalance);
 
 module.exports = router;
