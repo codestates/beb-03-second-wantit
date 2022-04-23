@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "fs": "^0.0.1-security",
+    "json-parser": "^3.1.2",
+    "json-stringify": "^1.0.0"
+  }
+}
