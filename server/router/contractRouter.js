@@ -7,7 +7,7 @@ const {
   balanceOf,
 } = require("../controller/contractController");
 
-router.post("/ethFaucet", faucet);
+router.post("/faucet", faucet);
 router.get("/getBalance", getBalance);
 router.post("/deploy", deploy);
 router.get("/balanceOf", balanceOf);
