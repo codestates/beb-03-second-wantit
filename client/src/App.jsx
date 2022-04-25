@@ -3,24 +3,24 @@ import Post from "./pages/Post";
 import Main from "./pages/Main";
 import PostForm from "./pages/PostForm";
 import Header from "./pages/components/Header";
-
-import { Route, Switch } from "react-router-dom";
+import { Stack } from "@mui/material";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Header />
-      <Switch>
-        <Route exact path="/" component={Main} />
-        {/* 게시글 전체 페이지 */}
-        <Route path="/posts">
-          <Posts />
-        </Route>
-        {/* 게시글 상세 페이지 */}
-        <Route path="/post/:id" component={Post} />
-        {/* 게시글 작성 페이지 */}
-        <Route path="/posts/form" component={PostForm} />
-      </Switch>
+      <Stack>
+        <Header />
+      </Stack>
+      <Routes>
+        <Route path="/*" element={<Main />} />
+
+        <Route path="/posts*" element={<Posts />} />
+
+        <Route path="/post/:id" element={<Post />} />
+
+        <Route path="/posts/form" element={<PostForm />} />
+      </Routes>
     </>
   );
 }

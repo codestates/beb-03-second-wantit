@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <div>
-      <Link to="/">
-        <Button>메인</Button>
-      </Link>
+      <Button component={Link} to="/">
+        메인
+      </Button>
+
       <Link to="/posts">
         <Button>게시글</Button>
       </Link>
