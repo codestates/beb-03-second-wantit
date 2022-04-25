@@ -4,11 +4,11 @@ import Main from "./pages/Main";
 import PostForm from "./pages/PostForm";
 import Header from "./pages/components/Header";
 
-import { Route, Switch, BrowserRouter } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
       <Header />
       <Switch>
         <Route exact path="/" component={Main} />
@@ -21,7 +21,7 @@ function App() {
         {/* 게시글 작성 페이지 */}
         <Route path="/posts/form" component={PostForm} />
       </Switch>
-    </BrowserRouter>
+    </>
   );
 }
 
