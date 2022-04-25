@@ -1,14 +1,27 @@
-import { Stack } from "@mui/material";
+import Posts from "./pages/Posts";
+import Post from "./pages/Post";
+import Main from "./pages/Main";
+import PostForm from "./pages/PostForm";
+import Header from "./pages/components/Header";
+
+import { Route, Switch, BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <Stack sx={{ border: 1, height: "200vh" }}>
-      <Stack sx={{ border: 1, height: "10%" }}></Stack>
-      <Stack sx={{ border: 1, height: "70%" }}>
-        <Routes></Routes>
-      </Stack>
-      <Stack sx={{ border: 1, height: "20%" }}></Stack>
-    </Stack>
+    <BrowserRouter>
+      <Header />
+      <Switch>
+        <Route exact path="/" component={Main} />
+        {/* 게시글 전체 페이지 */}
+        <Route path="/posts">
+          <Posts />
+        </Route>
+        {/* 게시글 상세 페이지 */}
+        <Route path="/post/:id" component={Post} />
+        {/* 게시글 작성 페이지 */}
+        <Route path="/posts/form" component={PostForm} />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
