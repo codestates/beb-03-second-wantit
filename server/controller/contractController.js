@@ -1,5 +1,6 @@
 const Web3 = require("web3");
-const web3 = new Web3("http://localhost:7545");
+// const web3 = new Web3("http://localhost:7545");
+const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
 const { Users } = require("../models");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -12,16 +13,20 @@ module.exports = {
   faucet: async (req, res) => {
     try {
       //DB에서 admin 계정 address 조회
+      console.log("1");
       const admin = await Users.findOne({
         attributes: ["address"],
-        where: { user_id: "admin" },
+        where: { user_id: "admin1" },
       });
       //지금 사용중인 네트워크의 계정 조회
+      console.log("2");
       const accounts = await web3.eth.getAccounts();
+      console.log(accounts);
       //트랜잭션 보내기
+      console.log("3");
       let rawTx = await web3.eth.sendTransaction({
         from: accounts[0],
-        to: admin.dataValues.address,
+        to: admin.dataValues.address, // 데이터베이스의 admin 계정으로 1이더 전송
         value: "1000000000000000000",
       });
 
@@ -32,6 +37,7 @@ module.exports = {
 
         //트랜잭션에 서명
         let signTx = await web3.eth.accounts.signTransaction(
+          // FIXME: accounts 는 네트워크 전체에 등록된 계정들을 반환하는 메서드로, 개별적으로 프라이빗 키가 있음. 하지만 여기서는 admin의 개인 키로 일괄 서명 진행.
           { ...rawTx, gas: 2000000 },
           env.GANACHE_PRIVATEKEY
         );
