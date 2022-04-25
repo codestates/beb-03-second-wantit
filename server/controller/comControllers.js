@@ -1,4 +1,5 @@
-const { Comments } = require("../models");
+const { Users, Comments } = require("../models");
+const { transfer } = require("./transfer/transfer");
 
 module.exports = {
   comments: async (req, res) => {
@@ -9,6 +10,11 @@ module.exports = {
         post_id,
         content,
       });
+      const recipient = await Users.findOne({
+        where: { id: user_id },
+        attributes: ["address"],
+      });
+      transfer(recipient.dataValues.address);
       res.status(201).send({ message: "Successfully write comments" });
     } catch (e) {
       console.error(e);

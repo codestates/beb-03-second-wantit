@@ -1,4 +1,5 @@
-const { Posts } = require("../models");
+const { Users, Posts } = require("../models");
+const { transfer } = require("./transfer/transfer");
 
 module.exports = {
   //게시글 작성 핸들러
@@ -13,6 +14,11 @@ module.exports = {
         user_id,
       });
       if (writepost) {
+        const recipient = await Users.findOne({
+          where: { id: user_id },
+          attributes: ["address"],
+        });
+        transfer(recipient.dataValues.address);
         res.status(201).send({ message: "Success write post" });
       } else {
         res.status(400).send({ message: "Failed to write Post" });

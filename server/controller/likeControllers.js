@@ -1,4 +1,5 @@
 const { Users, Posts, Likes } = require("../models");
+const { transfer } = require("./transfer/transfer");
 
 module.exports = {
   // 좋아요 추가 핸들러
@@ -17,6 +18,11 @@ module.exports = {
         },
       });
       if (liked) {
+        const recipient = await Users.findOne({
+          where: { id: user_id },
+          attributes: ["address"],
+        });
+        transfer(recipient.dataValues.address);
         res.status(200).send({ message: "Click like button" });
       } else {
         res.status(404).send({ message: "Not click" });

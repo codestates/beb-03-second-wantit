@@ -75,8 +75,6 @@ contract WantitToken is ERC20Interface, OwnerHelper {
     string public _name;
     string public _symbol;
     uint8 public _decimals;
-    bool public _tokenLock;
-    mapping (address => bool) public _personalTokenLock;
 
     constructor() {
         _name = "WantitToken";
@@ -84,7 +82,6 @@ contract WantitToken is ERC20Interface, OwnerHelper {
         _decimals = 18;
         _totalSupply = 100000000e18;
         _balances[msg.sender] = _totalSupply;
-        _tokenLock = true;
     }
 
     function name() public view returns (string memory) {
@@ -129,14 +126,13 @@ contract WantitToken is ERC20Interface, OwnerHelper {
         emit Transfer(msg.sender, sender, recipient, amount);
         uint256 currentAllowance = _allowances[sender][msg.sender];
         require(currentAllowance >= amount, "ERC20: transfer amount exceeds allowance");
-        _approve(sender, msg.sender, currentAllowance, currentAllowance - amount);
+        _approve(msg.sender, sender, currentAllowance, currentAllowance - amount);
         return true;
     }
 
     function _transfer(address sender, address recipient, uint256 amount) internal virtual {
         require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
-        require(isTokenLock(sender, recipient) == false, "TokenLock: invalid token transfer");
         uint256 senderBalance = _balances[sender];
         require(senderBalance >= amount, "ERC20: transfer amount exceeds balance");
         _balances[sender] = senderBalance.sub(amount);
@@ -149,30 +145,5 @@ contract WantitToken is ERC20Interface, OwnerHelper {
         require(currentAmount == _allowances[owner][spender], "ERC20: invalid currentAmount");
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, currentAmount, amount);
-    }
-
-    function isTokenLock(address from, address to) public view returns (bool lock) {
-        lock = false;
-
-        if(_tokenLock == true)
-        {
-             lock = true;
-        }
-
-        if(_personalTokenLock[from] == true || _personalTokenLock[to] == true) {
-             lock = true;
-        }
-    }
-
-    // 다음의 코드에서 함수로 전달되는 파라미터 브라켓 뒤에 오는 onlyOwner가 예시입니다.
-    function removeTokenLock() onlyOwner public {
-        require(_tokenLock == true);
-        _tokenLock = false;
-    }
-
-    // 다음의 코드에서 함수로 전달되는 파라미터 브라켓 뒤에 오는 onlyOwner가 예시입니다.
-    function removePersonalTokenLock(address _who) onlyOwner public {
-        require(_personalTokenLock[_who] == true);
-        _personalTokenLock[_who] = false;
     }
 }

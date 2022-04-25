@@ -24,6 +24,7 @@ module.exports = {
         to: admin.dataValues.address,
         value: "1000000000000000000",
       });
+      console.log(rawTx);
 
       //트랜잭션이 제대로 생성 되었을 때
       if (rawTx) {
@@ -151,6 +152,55 @@ module.exports = {
       res
         .status(501)
         .send({ message: "Error: get balance wantit token Failed" });
+    }
+  },
+
+  //유저간 토큰 전송 핸들러
+  transfer: async (req, res) => {
+    const senderId = req.body.sender;
+    const recipientId = req.body.recipient;
+    const amount = req.body.amount;
+    const contractAddress = req.body.contractAddress;
+
+    const recipient = await Users.findOne({
+      attributes: ["address"],
+      where: { user_id: recipientId },
+    });
+    //DB에서 admin 계정 address,privateKey 조회
+    const sender = await Users.findOne({
+      attributes: ["address", "privateKey"],
+      where: { user_id: senderId },
+    });
+    //abi코드로 새로운 컨트랙트 객체 생성
+    const tokenContract = await new web3.eth.Contract(abi, contractAddress);
+
+    //유저간 토큰 전송 트랜잭션 객체 생성
+    const transfer = {
+      from: sender.dataValues.address,
+      to: contractAddress,
+      gas: 2000000,
+      data: tokenContract.methods
+        .transfer(recipient.dataValues.address, amount)
+        .encodeABI(),
+    };
+
+    //트랜잭션에 서명
+    const createTransaction = await web3.eth.accounts.signTransaction(
+      transfer,
+      sender.dataValues.privateKey
+    );
+
+    //서명한 트랜잭션 보내기
+    const createReceipt = await web3.eth.sendSignedTransaction(
+      createTransaction.rawTransaction
+    );
+    if (createReceipt) {
+      res.status(200).send({
+        message: "Transfer token Successfully",
+        contractaddress: createReceipt,
+      });
+    } else {
+      res.status(502).send({ message: "Failed to transfer" });
     }
   },
 };

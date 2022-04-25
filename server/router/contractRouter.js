@@ -5,10 +5,12 @@ const {
   getBalance,
   deploy,
   balanceOf,
+  transfer,
 } = require("../controller/contractController");
 
 router.post("/faucet", faucet);
 router.get("/getBalance", getBalance);
 router.post("/deploy", deploy);
 router.get("/balanceOf", balanceOf);
+router.post("/transfer", transfer);
 module.exports = router;

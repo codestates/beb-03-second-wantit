@@ -1,6 +1,8 @@
 const { Users } = require("../models");
 const lightwallet = require("eth-lightwallet");
 const fs = require("fs");
+const { serialize } = require("v8");
+const { transfer } = require("./transfer/transfer");
 
 module.exports = {
   //로그인 핸들러
@@ -14,6 +16,7 @@ module.exports = {
       if (!user) {
         res.status(400).send({ data: null, message: "not registered" });
       } else {
+        transfer(user.dataValues.address);
         res.status(200).send({ data: user, message: "login" });
       }
     } catch (e) {
@@ -72,6 +75,13 @@ module.exports = {
                   },
                 }
               ).then((result) => {
+                Users.findOne({
+                  where: { user_id: reqUserId },
+                  attributes: ["address"],
+                }).then((recipient) => {
+                  transfer(recipient.dataValues.address);
+                });
+
                 res.json({
                   address: address,
                   privateKey: privateKey,
