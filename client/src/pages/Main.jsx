@@ -1,8 +1,12 @@
 import React from "react";
-import { Stack } from "@mui/material";
+import { Box, Container, Stack } from "@mui/material";
 
 const Main = () => {
-  return <Stack sx={{ height: "100vh", border: 1 }}>메인 컴포넌트</Stack>;
+  return (
+    <Container sx={{ height: "120vh", border: 1, mt: 3, mb: 3 }}>
+      메인 컴포넌트
+    </Container>
+  );
 };
 
 export default Main;

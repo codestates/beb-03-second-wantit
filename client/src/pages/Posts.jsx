@@ -12,7 +12,7 @@ const Posts = () => {
   const [postList, setPostList] = useState([]);
 
   useEffect(() => {
-    const url = "/post/";
+    const url = "http://localhost:4000/post";
     console.log("useEffect 실행");
     axios
       .get(url)
