@@ -1,38 +1,51 @@
 import React from "react";
-import Paper from "@mui/material/Paper";
-import { Typography } from "@mui/material";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  Typography,
+  ListItem,
+  Divider,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+} from "@mui/material";
 import { Link } from "react-router-dom";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: "#fff",
-  padding: theme.spacing(3),
-  textAlign: "center",
-}));
 
 const PostItem = (post) => {
   return (
     <>
-      <Link to={`/post/${post.post.id}`}>
-        <Item>
-          <Typography
-            variant="body2"
-            component="span"
-            sx={{ margin: "1rem", fontWeight: "bold" }}
-          >
-            {post.post.title}
-          </Typography>
-          <Typography variant="body2" component="span" sx={{ margin: "1rem" }}>
-            {post.post.user_id}
-          </Typography>
-          <Typography variant="body2" component="span" sx={{ margin: "1rem" }}>
-            {post.post.createdAt || new Date().toLocaleDateString()}
-          </Typography>
-          <Typography variant="body1" component="p">
-            {post.post.body}
-          </Typography>
-        </Item>
-      </Link>
+      <ListItem
+        alignItems="flex-start"
+        component={Link}
+        to={`/post/${post.post.id}`}
+      >
+        <ListItemAvatar>
+          <Avatar alt="Remy Sharp" src="img/steemit.svg" />
+        </ListItemAvatar>
+        <ListItemText
+          primary={post.post.title}
+          secondary={
+            <React.Fragment>
+              <Typography
+                sx={{ display: "inline" }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                {post.post.user_id}
+              </Typography>
+              {post.post.body}
+              <Typography
+                sx={{ display: "inline" }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                {post.post.createdAt || new Date().toLocaleDateString()}
+              </Typography>
+            </React.Fragment>
+          }
+        />
+      </ListItem>
+      <Divider variant="inset" component="li" />
     </>
   );
 };
