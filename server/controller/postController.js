@@ -64,7 +64,10 @@ module.exports = {
         const likes = await post.getLikes({});
         res
           .status(200)
-          .send({ data: { comments, likes: likes.length }, message: "ok" });
+          .send({
+            data: { comments, likes: likes.length, post },
+            message: "ok",
+          });
       } else {
         res.status(404).send({ message: "No post are found" });
       }
