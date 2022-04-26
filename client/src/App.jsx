@@ -2,6 +2,7 @@ import Posts from "./pages/Posts";
 import Post from "./pages/Post";
 import Main from "./pages/Main";
 import PostForm from "./pages/PostForm";
+import Mypage from "./pages/Mypage";
 import Header from "./pages/components/Header";
 import { Stack } from "@mui/material";
 import { Route, Routes } from "react-router-dom";

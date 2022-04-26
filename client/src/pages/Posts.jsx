@@ -1,19 +1,14 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Stack } from "@mui/material";
-import Box from "@mui/material/Box";
-import { Container } from "@mui/material";
-import PostItem from "./components/PostItem";
-import Button from "@mui/material/Button";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import PostItem from "./components/PostItem";
+import { Stack, Box, Container, Button, List } from "@mui/material";
 
 const Posts = () => {
   const [postList, setPostList] = useState([]);
 
   useEffect(() => {
     const url = "http://localhost:4000/post";
-    console.log("useEffect 실행");
     axios
       .get(url)
       .then((payload) => {
@@ -26,15 +21,15 @@ const Posts = () => {
     <Container>
       <Box sx={{ width: "100%" }}>
         <Stack direction="row" spacing={2}>
-          <Link to="/post">
-            <Button>게시글 작성</Button>
-          </Link>
+          <Button component={Link} to="/post">
+            게시글 작성
+          </Button>
         </Stack>
-        <Stack spacing={2}>
+        <List sx={{ width: "100%" }}>
           {postList.map((post) => (
             <PostItem key={post.id} post={post} />
           ))}
-        </Stack>
+        </List>
       </Box>
     </Container>
   );
