@@ -13,12 +13,9 @@ function App() {
         <Header />
       </Stack>
       <Routes>
-        <Route path="/*" element={<Main />} />
-
+        <Route path="/" exact={true} element={<Main />} />
         <Route path="/posts*" element={<Posts />} />
-
         <Route path="/post/:id" element={<Post />} />
-
         <Route path="/posts/form" element={<PostForm />} />
       </Routes>
     </>
