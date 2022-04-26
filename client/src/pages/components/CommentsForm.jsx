@@ -9,7 +9,7 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
   const onSubmitHandler = () => {
     axios
       .post("http://localhost:4000/post/comments", {
-        user_id: 1,
+        user_id: 5,
         post_id,
         content: comment,
       })
@@ -27,13 +27,13 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
       noValidate
       autoComplete="off"
     >
-      <div style={{ display: "flex" }}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
         <TextField
           id="comment"
           label="댓글"
           placeholder="댓글을 작성하세요"
           sx={{
-            width: "95%",
+            width: 1000,
           }}
           value={comment}
           onChange={(event) => {
@@ -43,11 +43,11 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
         <Button
           onClick={onSubmitHandler}
           variant="contained"
-          sx={{ width: "5%" }}
+          sx={{ height: 50, width: 80 }}
         >
           작성
         </Button>
-      </div>
+      </Stack>
     </Box>
   );
 };
