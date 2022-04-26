@@ -38,62 +38,59 @@ const Post = () => {
       {isLoading ? (
         <div>로딩중입니다</div>
       ) : (
-        <Stack>
+        <Stack justifyContent="space-between" sx={{ height: "87vh" }}>
           <Stack
             component="form"
             sx={{
-              border: 1,
-              height: 400,
+              backgroundColor: "#f1f1f1",
+              height: 600,
+              borderRadius: 2,
               width: "100%",
               mt: 2,
               mb: 3,
+              boxShadow: "0 1px 1px 1px gray",
               "& .MuiTextField-root": { m: 1 },
             }}
             noValidate
             autoComplete="off"
           >
-            {/* <TextField
-              id="outlined-multiline-flexible"
-              label="제목"
-              multiline
-              sx={{ width: "100%" }}
-              value={postData.post.title}
-            /> */}
-
-            <Typography
-              variant="h4"
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
               sx={{
                 mt: 2,
-                ml: 3,
-                border: 1,
-                borderRadius: 2,
                 height: 50,
-                backgroundColor: "#ebe8e8ee",
+                boxShadow: "0 3px 3px -3px gray",
               }}
             >
-              제목 : {postData.post.title}
-            </Typography>
-            {/* <TextField
-              id="outlined-multiline-static"
-              label="내용"
-              multiline
-              rows={4}
-              sx={{ width: "100%" }}
-              value={postData.post.body}
-            /> */}
-            <Typography sx={{ fontSize: 20 }}>{postData.post.body}</Typography>
-
-            <Button
-              component={Link}
-              to="/posts/form"
-              state={{
-                post: postData.post,
-              }}
-              variant="outlined"
-            >
-              수정
-            </Button>
+              <Typography variant="h4" sx={{ ml: 3 }}>
+                제목 : {postData.post.title}
+              </Typography>
+              <Button
+                component={Link}
+                to="/posts/form"
+                sx={{ mr: 3 }}
+                state={{
+                  post: postData.post,
+                }}
+                variant="outlined"
+              >
+                수정
+              </Button>
+            </Stack>
+            <Stack sx={{ mt: 1, padding: 3, height: 300 }}>
+              <Typography sx={{ fontSize: 20 }}>
+                {postData.post.body}
+              </Typography>
+            </Stack>
           </Stack>
+          <Stack sx={{ border: 1, height: 30 }}></Stack>
+          <CommentsForm
+            post_id={postData.post.id}
+            setCommentEventFlag={setCommentEventFlag}
+            commentEventFlag={commentEventFlag}
+          />
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
             {postData.comments.map((comment) => (
               <Comments
@@ -104,11 +101,6 @@ const Post = () => {
               />
             ))}
           </List>
-          <CommentsForm
-            post_id={postData.post.id}
-            setCommentEventFlag={setCommentEventFlag}
-            commentEventFlag={commentEventFlag}
-          />
         </Stack>
       )}
     </Container>
