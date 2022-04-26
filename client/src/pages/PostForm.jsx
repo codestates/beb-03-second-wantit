@@ -21,7 +21,7 @@ const PostForm = () => {
   };
 
   const onSubmitHandler = () => {
-    const url = `/post/${post.id}`;
+    const url = `http://localhost:4000/post/${post.id}`;
     axios
       .patch(url, { title: post.title, body: post.body })
       .catch((e) => console.error(e));

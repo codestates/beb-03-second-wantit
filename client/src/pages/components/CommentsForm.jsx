@@ -8,7 +8,11 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
 
   const onSubmitHandler = () => {
     axios
-      .post("/post/comments/", { user_id: 1, post_id, content: comment })
+      .post("http://localhost:4000/post/comments", {
+        user_id: 1,
+        post_id,
+        content: comment,
+      })
       .catch((e) => console.error(e));
     setCommentEventFlag(!commentEventFlag);
     setComment("");

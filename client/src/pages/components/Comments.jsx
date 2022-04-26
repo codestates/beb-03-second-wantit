@@ -31,7 +31,7 @@ const Comments = ({ comment, setCommentEventFlag, commentEventFlag }) => {
   const [openCommentEditModal, setOpenCommentEditModal] = useState(false);
   const [revisedComment, setRevisedComment] = useState(comment.content);
   const onSubmitHandler = () => {
-    const url = `/post/comments/${comment.id}`;
+    const url = `http://localhost:4000/post/comments/${comment.id}`;
     axios
       .patch(url, { content: revisedComment })
       .catch((e) => console.error(e));

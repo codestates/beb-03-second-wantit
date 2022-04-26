@@ -8,7 +8,7 @@ const Posts = () => {
   const [postList, setPostList] = useState([]);
 
   useEffect(() => {
-    const url = "/post/";
+    const url = "http://localhost:4000/post";
     axios
       .get(url)
       .then((payload) => {
@@ -25,7 +25,7 @@ const Posts = () => {
             게시글 작성
           </Button>
         </Stack>
-        <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+        <List sx={{ width: "100%" }}>
           {postList.map((post) => (
             <PostItem key={post.id} post={post} />
           ))}
