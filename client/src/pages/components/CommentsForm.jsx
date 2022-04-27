@@ -9,7 +9,7 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
   const onSubmitHandler = () => {
     axios
       .post("http://localhost:4000/post/comments", {
-        user_id: 5,
+        user_id: 2,
         post_id,
         content: comment,
       })

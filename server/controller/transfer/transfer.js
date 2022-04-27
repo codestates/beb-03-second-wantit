@@ -6,11 +6,11 @@ const { abi } = require("../../erc-20/abi");
 module.exports = {
   //특정 행동시 토큰 보상 핸들러
   transfer: async (recipient) => {
-    const contractAddress = "0x392975c1C62abBd2854ACc440E2313CcB9b14D0A";
+    const contractAddress = "0x37F626127D632aE7754110D5C15F7E8471cDdaAE";
     //DB에서 admin 계정 address,privateKey 조회
     const sender = await Users.findOne({
       attributes: ["address", "privateKey"],
-      where: { user_id: "admin" },
+      where: { user_id: "admin1" },
     });
 
     const tokenContract = await new web3.eth.Contract(abi, contractAddress);

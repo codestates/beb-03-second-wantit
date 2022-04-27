@@ -7,8 +7,9 @@ import { Container, Box, Stack, TextField, List, Button } from "@mui/material";
 const PostForm = () => {
   const loc = useLocation();
   const nav = useNavigate();
-  const [post, setPost] = useState(loc.state.post);
-
+  const [post, setPost] = useState(
+    loc.state?.post || { title: "", body: "", user_id: 2 }
+  );
   const onChangeHandler = (target) => {
     switch (target.id) {
       case "title":
@@ -21,11 +22,26 @@ const PostForm = () => {
   };
 
   const onSubmitHandler = () => {
-    const url = `http://localhost:4000/post/${post.id}`;
-    axios
-      .patch(url, { title: post.title, body: post.body })
-      .catch((e) => console.error(e));
-    nav(url);
+    if (post.id) {
+      const url = `http://localhost:4000/post/${post.id}`;
+      axios.patch(url, { title: post.title, body: post.body }).catch((e) => {
+        console.error(e);
+      });
+      nav(`/post/${post.id}`);
+    } else {
+      const url = `http://localhost:4000/post`;
+      console.log(post);
+      axios
+        .post(url, {
+          title: post.title,
+          body: post.body,
+          user_id: post.user_id,
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+      nav("/posts");
+    }
   };
 
   return (

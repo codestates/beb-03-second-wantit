@@ -34,6 +34,7 @@ function App() {
           <Route path="/*" element={<Posts />} />
           <Route path="/login" element={<Login handleLogin={handleLogin} />} />
           <Route path="/post/:id" element={<Post />} />
+          <Route path="/posts" element={<Posts />} />
           <Route path="/posts/form" element={<PostForm />} />
         </Routes>
       </Stack>
