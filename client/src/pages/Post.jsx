@@ -2,17 +2,10 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  Container,
-  Box,
-  Stack,
-  TextField,
-  List,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Container, Stack, List, Button, Typography } from "@mui/material";
 import Comments from "./components/Comments";
 import CommentsForm from "./components/CommentsForm";
+import Loading from "./Loading";
 
 const Post = () => {
   const params = useParams();
@@ -38,7 +31,7 @@ const Post = () => {
       sx={{ background: "#fff", mt: 3, mb: 3, height: "87vh", borderRadius: 2 }}
     >
       {isLoading ? (
-        <div>로딩중입니다</div>
+        <Loading />
       ) : (
         <Stack justifyContent="space-between" sx={{ height: "87vh" }}>
           <Stack
@@ -91,7 +84,6 @@ const Post = () => {
               </Typography>
             </Stack>
           </Stack>
-          <Stack sx={{ border: 1, height: 30 }}></Stack>
           <CommentsForm
             post_id={postData.post.id}
             setCommentEventFlag={setCommentEventFlag}

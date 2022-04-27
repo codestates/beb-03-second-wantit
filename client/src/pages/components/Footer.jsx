@@ -1,5 +1,4 @@
 import { Button, Stack, Box, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
 const Footer = () => {
@@ -15,13 +14,13 @@ const Footer = () => {
       }}
     >
       <Stack direction="row" alignItems="center" sx={{ height: "100%" }}>
-        <Button component={Link} to="/" sx={{ height: 50, width: 150 }}>
+        <Box sx={{ height: 50, width: 150 }}>
           <img
             src="/logo(wantit)2.png"
             alt="logo"
             style={{ height: "100%", width: "100%" }}
           />
-        </Button>
+        </Box>
         <Stack>
           <Typography sx={{ fontSize: 20, fontWeight: "bold" }}>
             wantit

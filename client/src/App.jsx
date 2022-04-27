@@ -9,40 +9,42 @@ import { Route, Routes } from "react-router-dom";
 import Footer from "./pages/components/Footer";
 import Login from "./pages/Login";
 import { useState } from "react";
+import Signup from "./pages/Signup";
 
 function App() {
-	const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
 
-	function handleLogin() {
-		setIsLogin(true);
-	}
+  function handleLogin() {
+    setIsLogin(true);
+  }
 
-	return (
-		<>
-			<Header />
+  function handleLogOut() {
+    setIsLogin(false);
+  }
 
-			<Stack
-				sx={{
-					height: "auto",
-					minHeight: "88vh",
-					maxHeight: "124vh",
-					backgroundColor: "#ebe8e8ee",
-				}}
-			>
-				<Routes>
-					{/* <Route path="/*" element={<Main />} /> */}
-					<Route path="/*" element={<Posts />} />
-					<Route path="/login" element={<Login handleLogin={handleLogin} />} />
-					<Route path="/post/:id" element={<Post />} />
-					<Route path="/posts" element={<Posts />} />
-					<Route path="/posts/form" element={<PostForm />} />
-					<Route path="/mypage" element={<Mypage />} />
-				</Routes>
-			</Stack>
+  return (
+    <>
+      <Header handleLogOut={handleLogOut} />
+      <Stack
+        sx={{
+          height: "auto",
+          minHeight: "88vh",
+          backgroundColor: "#ebe8e8ee",
+        }}
+      >
+        <Routes>
+          <Route path="/*" element={isLogin ? <Posts /> : <Main />} />
+          <Route path="/login" element={<Login handleLogin={handleLogin} />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/post/:id" element={<Post />} />
+          <Route path="/posts/form" element={<PostForm />} />
+          <Route path="/mypage" element={<Mypage />} />
+        </Routes>
+      </Stack>
 
-			<Footer />
-		</>
-	);
+      <Footer />
+    </>
+  );
 }
 
 export default App;
