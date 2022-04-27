@@ -21,7 +21,7 @@ const Posts = () => {
     <Container>
       <Box sx={{ width: "100%" }}>
         <Stack direction="row" spacing={2}>
-          <Button component={Link} to="/post">
+          <Button component={Link} to="/posts/form">
             게시글 작성
           </Button>
         </Stack>

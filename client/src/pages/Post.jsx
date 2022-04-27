@@ -23,13 +23,15 @@ const Post = () => {
   useEffect(() => {
     const url = `http://localhost:4000/post/${params.id}`;
     axios
-      .get(url)
+      .get(url, { user_id: 2 })
       .then((payload) => {
         setPostData(payload.data.data);
         setLoading(false);
       })
       .catch((e) => console.error(e));
   }, [commentEventFlag]);
+
+  const likeEventHandler = () => {};
 
   return (
     <Container
@@ -67,6 +69,10 @@ const Post = () => {
               <Typography variant="h4" sx={{ ml: 3 }}>
                 제목 : {postData.post.title}
               </Typography>
+              <Typography variant="p">Likes : {postData.likes}</Typography>
+              <Button onClick={likeEventHandler} variant="outlined">
+                좋아요
+              </Button>
               <Button
                 component={Link}
                 to="/posts/form"
