@@ -1,4 +1,4 @@
-const { Users, Posts } = require("../models");
+const { Users, Posts, Likes } = require("../models");
 const { transfer } = require("./transfer/transfer");
 
 module.exports = {
@@ -7,6 +7,9 @@ module.exports = {
     const title = req.body.title;
     const body = req.body.body;
     const user_id = req.body.user_id;
+    console.log(title);
+    console.log(body);
+    console.log(user_id);
     try {
       const writepost = await Posts.create({
         title,
@@ -56,18 +59,20 @@ module.exports = {
   //특정 게시물 조회
   findById: async (req, res) => {
     const id = req.params.id;
+    const user_id = req.body.user_id;
+    console.log(user_id);
 
     try {
       const post = await Posts.findOne({ where: { id } });
+      // const isLiked = await Likes.count({ where: { user_id, post_id: id } });
+
       if (post) {
         const comments = await post.getComments({});
         const likes = await post.getLikes({});
-        res
-          .status(200)
-          .send({
-            data: { comments, likes: likes.length, post },
-            message: "ok",
-          });
+        res.status(200).send({
+          data: { comments, likes: likes.length, post },
+          message: "ok",
+        });
       } else {
         res.status(404).send({ message: "No post are found" });
       }
