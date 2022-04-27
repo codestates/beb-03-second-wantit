@@ -19,7 +19,7 @@ const Posts = () => {
 
   return (
     <Container>
-      <Box sx={{ width: "100%" }}>
+      <Stack sx={{ width: "100%" }}>
         <Stack direction="row" spacing={2}>
           <Button component={Link} to="/post">
             게시글 작성
@@ -30,7 +30,7 @@ const Posts = () => {
             <PostItem key={post.id} post={post} />
           ))}
         </List>
-      </Box>
+      </Stack>
     </Container>
   );
 };

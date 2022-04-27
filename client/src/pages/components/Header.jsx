@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "@mui/material/Button";
-import { Stack } from "@mui/material";
+import { Stack, Typography, Avatar } from "@mui/material";
 import { Box } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
@@ -11,7 +11,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ handleLogOut }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [searchName, setSearchName] = useState("");
   const open = Boolean(anchorEl);
@@ -34,13 +34,14 @@ const Header = () => {
       }}
     >
       <Button component={Link} to="/">
-        <Box height="50px" width="150px">
-          <img
-            src="/logo(wantit).png"
-            alt="logo"
-            style={{ height: "100%", width: "100%" }}
-          />
-        </Box>
+        <Stack direction="row" alignItems="center" height="70px" width="180px">
+          <Avatar alt="Remy Sharp" src="img/steemit.svg" />
+          <Typography
+            sx={{ color: "#fff", fontSize: 25, ml: 2, fontWeight: "bold" }}
+          >
+            Want it
+          </Typography>
+        </Stack>
       </Button>
 
       <Stack sx={{ width: 400 }}>
@@ -70,7 +71,7 @@ const Header = () => {
       >
         <Button
           component={Link}
-          to="/login"
+          to="/"
           variant="text"
           sx={{
             color: "white",
@@ -102,7 +103,7 @@ const Header = () => {
           }}
         >
           <MenuItem onClick={handleClose}>profile</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <MenuItem onClick={(handleClose, handleLogOut)}>Logout</MenuItem>
         </Menu>
       </Stack>
     </Stack>

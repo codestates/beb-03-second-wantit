@@ -9,6 +9,7 @@ import { Route, Routes } from "react-router-dom";
 import Footer from "./pages/components/Footer";
 import Login from "./pages/Login";
 import { useState } from "react";
+import Signup from "./pages/Signup";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -17,22 +18,24 @@ function App() {
     setIsLogin(true);
   }
 
+  function handleLogOut() {
+    setIsLogin(false);
+  }
+
   return (
     <>
-      <Header />
-
+      <Header handleLogOut={handleLogOut} />
       <Stack
         sx={{
           height: "auto",
           minHeight: "88vh",
-          maxHeight: "124vh",
           backgroundColor: "#ebe8e8ee",
         }}
       >
         <Routes>
-          {/* <Route path="/*" element={<Main />} /> */}
-          <Route path="/*" element={<Posts />} />
+          <Route path="/*" element={isLogin ? <Posts /> : <Main />} />
           <Route path="/login" element={<Login handleLogin={handleLogin} />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="/posts/form" element={<PostForm />} />
         </Routes>

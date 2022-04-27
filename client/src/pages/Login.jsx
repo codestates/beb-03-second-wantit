@@ -3,11 +3,14 @@ import { Box } from "@mui/system";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login({ handleLogin }) {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [successLogin, setSuccessLogin] = useState(true);
+
+  const history = useNavigate();
 
   const login = () => {
     axios
@@ -19,16 +22,20 @@ export default function Login({ handleLogin }) {
         if (res.data.message === "login") {
           handleLogin();
           setSuccessLogin(true);
-        } else {
-          setSuccessLogin(false);
+          console.log("성공");
+          history("/");
         }
+      })
+      .catch((e) => {
+        console.log(e);
+        setSuccessLogin(false);
       });
   };
 
   return (
     <Container
       sx={{
-        mt: 3,
+        mt: 20,
         mb: 3,
         backgroundColor: "#fff",
         borderRadius: 3,
@@ -99,6 +106,8 @@ export default function Login({ handleLogin }) {
               </Button>
             </Stack>
             <Button
+              component={Link}
+              to="/signup"
               sx={{
                 mt: 8,
                 height: 55,
