@@ -71,7 +71,7 @@ const Header = ({ handleLogOut }) => {
       >
         <Button
           component={Link}
-          to="/"
+          to="/posts/form"
           variant="text"
           sx={{
             color: "white",
@@ -102,7 +102,9 @@ const Header = ({ handleLogOut }) => {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={handleClose}>profile</MenuItem>
+          <MenuItem onClick={handleClose} component={Link} to="/mypage">
+            profile
+          </MenuItem>
           <MenuItem onClick={(handleClose, handleLogOut)}>Logout</MenuItem>
         </Menu>
       </Stack>

@@ -38,6 +38,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="/posts/form" element={<PostForm />} />
+          <Route path="/mypage" element={<Mypage />} />
         </Routes>
       </Stack>
 

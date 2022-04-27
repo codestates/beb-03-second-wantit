@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import PostItem from "./components/PostItem";
-import { Stack, Box, Container, Button, List } from "@mui/material";
+import { Stack, Container, Button, List } from "@mui/material";
 
 const Posts = () => {
   const [postList, setPostList] = useState([]);
@@ -21,7 +21,7 @@ const Posts = () => {
     <Container>
       <Stack sx={{ width: "100%" }}>
         <Stack direction="row" spacing={2}>
-          <Button component={Link} to="/post">
+          <Button component={Link} to="/posts/form">
             게시글 작성
           </Button>
         </Stack>

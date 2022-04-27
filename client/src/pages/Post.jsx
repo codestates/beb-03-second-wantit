@@ -2,17 +2,10 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  Container,
-  Box,
-  Stack,
-  TextField,
-  List,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Container, Stack, List, Button, Typography } from "@mui/material";
 import Comments from "./components/Comments";
 import CommentsForm from "./components/CommentsForm";
+import Loading from "./Loading";
 
 const Post = () => {
   const params = useParams();
@@ -23,7 +16,7 @@ const Post = () => {
   useEffect(() => {
     const url = `http://localhost:4000/post/${params.id}`;
     axios
-      .get(url)
+      .get(url, { user_id: 2 })
       .then((payload) => {
         setPostData(payload.data.data);
         setLoading(false);
@@ -31,12 +24,14 @@ const Post = () => {
       .catch((e) => console.error(e));
   }, [commentEventFlag]);
 
+  const likeEventHandler = () => {};
+
   return (
     <Container
       sx={{ background: "#fff", mt: 3, mb: 3, height: "87vh", borderRadius: 2 }}
     >
       {isLoading ? (
-        <div>로딩중입니다</div>
+        <Loading />
       ) : (
         <Stack justifyContent="space-between" sx={{ height: "87vh" }}>
           <Stack
@@ -67,6 +62,10 @@ const Post = () => {
               <Typography variant="h4" sx={{ ml: 3 }}>
                 제목 : {postData.post.title}
               </Typography>
+              <Typography variant="p">Likes : {postData.likes}</Typography>
+              <Button onClick={likeEventHandler} variant="outlined">
+                좋아요
+              </Button>
               <Button
                 component={Link}
                 to="/posts/form"
@@ -85,7 +84,6 @@ const Post = () => {
               </Typography>
             </Stack>
           </Stack>
-          <Stack sx={{ border: 1, height: 30 }}></Stack>
           <CommentsForm
             post_id={postData.post.id}
             setCommentEventFlag={setCommentEventFlag}
