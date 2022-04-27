@@ -11,36 +11,37 @@ import Login from "./pages/Login";
 import { useState } from "react";
 
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
+	const [isLogin, setIsLogin] = useState(false);
 
-  function handleLogin() {
-    setIsLogin(true);
-  }
+	function handleLogin() {
+		setIsLogin(true);
+	}
 
-  return (
-    <>
-      <Header />
+	return (
+		<>
+			<Header />
 
-      <Stack
-        sx={{
-          height: "auto",
-          minHeight: "88vh",
-          maxHeight: "124vh",
-          backgroundColor: "#ebe8e8ee",
-        }}
-      >
-        <Routes>
-          {/* <Route path="/*" element={<Main />} /> */}
-          <Route path="/*" element={<Posts />} />
-          <Route path="/login" element={<Login handleLogin={handleLogin} />} />
-          <Route path="/post/:id" element={<Post />} />
-          <Route path="/posts/form" element={<PostForm />} />
-        </Routes>
-      </Stack>
+			<Stack
+				sx={{
+					height: "auto",
+					minHeight: "88vh",
+					maxHeight: "124vh",
+					backgroundColor: "#ebe8e8ee",
+				}}
+			>
+				<Routes>
+					{/* <Route path="/*" element={<Main />} /> */}
+					<Route path="/*" element={<Posts />} />
+					<Route path="/login" element={<Login handleLogin={handleLogin} />} />
+					<Route path="/post/:id" element={<Post />} />
+					<Route path="/posts/form" element={<PostForm />} />
+					<Route path="/mypage" element={<Mypage />} />
+				</Routes>
+			</Stack>
 
-      <Footer />
-    </>
-  );
+			<Footer />
+		</>
+	);
 }
 
 export default App;

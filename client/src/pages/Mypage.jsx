@@ -6,68 +6,98 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Post from "./Post";
 import Profile from "./components/Profile";
 import SendToken from "./components/SendToken";
-import PostItem from "./components/PostItem";
 import Comments from "./components/Comments";
 import axios from "axios";
+import PostItem from "./components/PostItem";
 
 function Mypage() {
-  const [isPost, setPost] = useState(undefined);
-  const [isComment, setComment] = useState(undefined);
-  const [value, setValue] = React.useState("1"); //tab 관련
+	const [post, setPost] = useState([]);
+	const [comment, setComment] = useState([]);
+	const [value, setValue] = React.useState("1"); //Tab 관련
+	// TabContext
+	const handleChange = (event, newValue) => {
+		setValue(newValue);
+	};
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+	// user 정보 조회
+	/* 	useEffect(() => {
+		axios
+			.post(`http://localhost:4000/users/login`, {
+				user_id: userId,
+				password: password,
+			})
+			.then((res) => {
+				setUserId(res.data.data.user_id);
+				setAddress(res.data.data.address);
+			})
+			.catch((e) => console.error(e));
+	}, []); */
 
-  return (
-    <Container>
-      <Stack sx={{ border: 1, height: "124vh" }}>
-        <Stack sx={{ border: 1, height: "20%", spacing: "10" }}>
-          {/* <Box component="span" sx={{ p: 1, border: "1px dashed grey" }}>
-					<Link sx={{ p: 1, border: "1px dashed" }}>edit Profile</Link>
-					</Box> */}
-          <Box component="span" sx={{ p: 5, border: "1px dashed grey" }}>
-            <Profile />
-          </Box>
-        </Stack>
+	// 유저 포스트, 댓글 받기
+	useEffect(() => {
+		axios
+			.get(`http://localhost:4000/users/findById?user_id=admin`)
+			.then((payload) => {
+				setPost(payload.data.data.posts);
+				console.log(post);
+				setComment(payload.data.data.comments);
+			})
+			.catch((e) => console.error(e));
+	}, []);
 
-        <Stack sx={{ border: 1, height: "80%", spacing: "10" }}>
-          {/* </Box> */}
-          <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
-                <Tab label="Posts" value="1" />
-                <Tab label="Comments" value="2" />
-                <Tab label="Communities" value="3" />
-                <Tab label="Notifications" value="4" />
-                <Tab label="Wallet" value="5" />
-              </TabList>
-            </Box>
-            <TabPanel value="1">
-              {isPost ? <Post /> : "@userId님은 아직 남긴 글이 없습니다."}
-            </TabPanel>
-            <TabPanel value="2">
-              {isComment ? (
-                <Comments />
-              ) : (
-                "@userId님은 아직 남긴 글이 없습니다."
-              )}
-            </TabPanel>
-            <TabPanel value="3">
-              @userId님은 아직 가입한 커뮤니티가 없습니다.
-            </TabPanel>
-            <TabPanel value="4">확인하지 않은 알림이 없습니다.</TabPanel>
-            <TabPanel value="5">
-              <SendToken />
-            </TabPanel>
-          </TabContext>
-        </Stack>
-      </Stack>
-    </Container>
-  );
+	return (
+		<Container
+			sx={{
+				mt: 3,
+				mb: 3,
+				backgroundColor: "#fff",
+				borderRadius: 3,
+			}}
+		>
+			<Stack sx={{ height: 900 }}>
+				<Profile />
+				<TabContext value={value}>
+					<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+						<TabList onChange={handleChange} aria-label="lab API tabs example">
+							<Tab label="Posts" value="1" />
+							<Tab label="Comments" value="2" />
+							<Tab label="Communities" value="3" />
+							<Tab label="Notifications" value="4" />
+							<Tab label="Wallet" value="5" />
+						</TabList>
+					</Box>
+					<TabPanel value="1">
+						{post.length !== 0 ? (
+							post.map((post) => <PostItem key={post.id} post={post} />)
+						) : (
+							<Stack>@userId님은 아직 남긴 글이 없습니다.</Stack>
+						)}
+					</TabPanel>
+					<TabPanel
+						value="2"
+						sx={{ width: "100%", bgcolor: "background.paper" }}
+					>
+						{/* {comment ? <Comments /> : "@userId님은 아직 남긴 글이 없습니다."} */}
+
+						{comment.map((comment) => (
+							<Comments
+								sx={{ width: "100%", bgcolor: "background.paper" }}
+								key={comment.id}
+								comment={comment}
+							/>
+						))}
+					</TabPanel>
+					<TabPanel value="3">
+						@userId님은 아직 가입한 커뮤니티가 없습니다.
+					</TabPanel>
+					<TabPanel value="4">확인하지 않은 알림이 없습니다.</TabPanel>
+					<TabPanel value="5">
+						<SendToken />
+					</TabPanel>
+				</TabContext>
+			</Stack>
+		</Container>
+	);
 }
 
 export default Mypage;
