@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const {
-  faucet,
-  getBalance,
-  deploy,
-  balanceOf,
-  transfer,
+	faucet,
+	getBalance,
+	deploy,
+	balanceOf,
+	transfer,
 } = require("../controller/contractController");
 
 router.post("/faucet", faucet);
