@@ -6,12 +6,15 @@ import { Container, Stack, List, Button, Typography } from "@mui/material";
 import Comments from "./components/Comments";
 import CommentsForm from "./components/CommentsForm";
 import Loading from "./Loading";
+import Pagination from "@mui/material/Pagination";
 
 const Post = () => {
   const params = useParams();
   const [isLoading, setLoading] = useState(true);
   const [postData, setPostData] = useState([]);
   const [commentEventFlag, setCommentEventFlag] = useState(false);
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * 5;
 
   useEffect(() => {
     const url = `http://localhost:4000/post/${params.id}`;
@@ -25,6 +28,11 @@ const Post = () => {
   }, [commentEventFlag]);
 
   const likeEventHandler = () => {};
+
+  const handlePage = (event, value) => {
+    //const nowPageInt = parseInt(event.target.outerText);
+    setPage(value);
+  };
 
   return (
     <Container
@@ -89,16 +97,41 @@ const Post = () => {
             setCommentEventFlag={setCommentEventFlag}
             commentEventFlag={commentEventFlag}
           />
-          <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-            {postData.comments.map((comment) => (
-              <Comments
-                key={comment.id}
-                comment={comment}
-                setCommentEventFlag={setCommentEventFlag}
-                commentEventFlag={commentEventFlag}
+          <Stack sx={{ height: 420 }}>
+            <List
+              sx={{
+                height: 370,
+                width: "100%",
+                bgcolor: "background.paper",
+              }}
+            >
+              {postData.comments.slice(offset, offset + 5).map((comment) => (
+                <Comments
+                  key={comment.id}
+                  comment={comment}
+                  setCommentEventFlag={setCommentEventFlag}
+                  commentEventFlag={commentEventFlag}
+                />
+              ))}
+            </List>
+            <Stack
+              alignItems="center"
+              justifyContent="center"
+              sx={{ height: 50, width: "100%" }}
+            >
+              <Pagination
+                count={
+                  postData.comments.length <= 5
+                    ? 1
+                    : Math.ceil(postData.comments.length / 5)
+                }
+                color="primary"
+                defaultPage={1}
+                page={page}
+                onChange={handlePage}
               />
-            ))}
-          </List>
+            </Stack>
+          </Stack>
         </Stack>
       )}
     </Container>

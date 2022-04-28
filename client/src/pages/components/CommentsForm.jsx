@@ -19,7 +19,7 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
   };
 
   return (
-    <Box
+    <Stack
       component="form"
       sx={{
         "& .MuiTextField-root": { m: 1 },
@@ -31,7 +31,7 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
         <TextField
           id="comment"
           label="댓글"
-          placeholder="댓글을 작성하세요"
+          placeholder="댓글을 작성하세요 (주의! 댓글은 삭제가 불가능합니다)"
           sx={{
             width: 1000,
           }}
@@ -48,7 +48,7 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
           작성
         </Button>
       </Stack>
-    </Box>
+    </Stack>
   );
 };
 

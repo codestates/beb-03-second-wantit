@@ -14,7 +14,7 @@ module.exports = {
       //DB에서 admin 계정 address 조회
       const admin = await Users.findOne({
         attributes: ["address"],
-        where: { user_id: "admin1" },
+        where: { user_id: "admin" },
       });
       //지금 사용중인 네트워크의 계정 조회
       const accounts = await web3.eth.getAccounts();
@@ -70,7 +70,7 @@ module.exports = {
     //DB에서 admin 계정 조회
     const admin = await Users.findOne({
       attributes: ["address"],
-      where: { user_id: "admin1" },
+      where: { user_id: "admin" },
     });
 
     //admin의 address에서 잔액 조회
@@ -92,7 +92,7 @@ module.exports = {
     //DB에서 admin 계정 address,privateKey 조회
     const admin = await Users.findOne({
       attributes: ["address", "privateKey"],
-      where: { user_id: "admin1" },
+      where: { user_id: "admin" },
     });
 
     //abi코드로 새로운 컨트랙트 객체 생성

@@ -48,7 +48,7 @@ const Comments = ({ comment, setCommentEventFlag, commentEventFlag }) => {
         <ListItemText
           primary={comment.content}
           secondary={
-            <React.Fragment>
+            <>
               <Typography
                 sx={{ display: "inline" }}
                 component="span"
@@ -58,7 +58,7 @@ const Comments = ({ comment, setCommentEventFlag, commentEventFlag }) => {
                 {comment.user_id}
               </Typography>
               {comment.createdAt || new Date().toLocaleDateString()}
-            </React.Fragment>
+            </>
           }
         />
         <Button
