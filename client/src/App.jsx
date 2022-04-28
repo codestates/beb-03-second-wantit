@@ -8,23 +8,15 @@ import { Stack } from "@mui/material";
 import { Route, Routes } from "react-router-dom";
 import Footer from "./pages/components/Footer";
 import Login from "./pages/Login";
-import { useState } from "react";
 import Signup from "./pages/Signup";
+import { useSelector } from "react-redux";
 
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
-
-  function handleLogin() {
-    setIsLogin(true);
-  }
-
-  function handleLogOut() {
-    setIsLogin(false);
-  }
+  const userInfo = useSelector((state) => state.userReducer).data;
 
   return (
     <>
-      <Header handleLogOut={handleLogOut} />
+      <Header />
       <Stack
         sx={{
           height: "auto",
@@ -33,8 +25,8 @@ function App() {
         }}
       >
         <Routes>
-          <Route path="/*" element={isLogin ? <Posts /> : <Main />} />
-          <Route path="/login" element={<Login handleLogin={handleLogin} />} />
+          <Route path="/*" element={userInfo ? <Posts /> : <Main />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="/posts/form" element={<PostForm />} />

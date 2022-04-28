@@ -9,6 +9,8 @@ import {
 	Modal,
 	Typography,
 } from "@mui/material";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const style = {
 	position: "absolute",
@@ -23,6 +25,8 @@ const style = {
 };
 
 const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
+	const userInfo = useSelector((state) => state.userReducer).data;
+	const nav = useNavigate();
 	const [comment, setComment] = useState("");
 	const [open, setOpen] = React.useState(false);
 	const handleOpen = () => setOpen(true);
@@ -31,7 +35,7 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
 	const onSubmitHandler = () => {
 		axios
 			.post("http://localhost:4000/post/comments", {
-				user_id: 2,
+				user_id: userInfo.id,
 				post_id,
 				content: comment,
 			})
@@ -74,7 +78,6 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
 				>
 					작성
 				</Button>
-
 				<Modal
 					open={open}
 					onClose={handleClose}
@@ -91,6 +94,7 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
 					</Box>
 				</Modal>
 			</Stack>
+			{userInfo === null && nav("/")}
 		</Box>
 	);
 };

@@ -20,13 +20,13 @@ router.post("/", postwrite);
 
 router.get("/", findAll);
 
-router.get("/:id", findById);
+router.post("/comments", comments);
+
+router.post("/:id", findById);
 
 router.patch("/:id", update);
 
 router.delete("/:id", deletePost);
-
-router.post("/comments", comments);
 
 router.patch("/comments/:commentsid", updateComments);
 

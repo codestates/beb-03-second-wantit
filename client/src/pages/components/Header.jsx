@@ -10,16 +10,25 @@ import { useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { unsetUser } from "../../modules/userReducer";
 
-const Header = ({ handleLogOut }) => {
+const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [searchName, setSearchName] = useState("");
+  const dispatch = useDispatch();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
+    console.log("handleClose 동작");
     setAnchorEl(null);
+  };
+
+  const logout = () => {
+    dispatch(unsetUser());
+    handleClose();
   };
 
   return (
@@ -105,7 +114,7 @@ const Header = ({ handleLogOut }) => {
           <MenuItem onClick={handleClose} component={Link} to="/mypage">
             profile
           </MenuItem>
-          <MenuItem onClick={(handleClose, handleLogOut)}>Logout</MenuItem>
+          <MenuItem onClick={logout}>Logout</MenuItem>
         </Menu>
       </Stack>
     </Stack>

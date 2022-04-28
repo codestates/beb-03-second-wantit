@@ -1,30 +1,55 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Container, Stack, List, Button, Typography } from "@mui/material";
 import Comments from "./components/Comments";
 import CommentsForm from "./components/CommentsForm";
 import Loading from "./Loading";
+import { useSelector } from "react-redux";
 
 const Post = () => {
   const params = useParams();
   const [isLoading, setLoading] = useState(true);
   const [postData, setPostData] = useState([]);
   const [commentEventFlag, setCommentEventFlag] = useState(false);
+  const [isLiked, setLiked] = useState();
+  const userInfo = useSelector((state) => state.userReducer).data;
+
+  console.log(userInfo);
+
+  const nav = useNavigate();
 
   useEffect(() => {
     const url = `http://localhost:4000/post/${params.id}`;
     axios
-      .get(url, { user_id: 2 })
+      .post(url, { user_id: userInfo.id })
       .then((payload) => {
         setPostData(payload.data.data);
         setLoading(false);
+        setLiked(!!payload.data.data.isLiked);
       })
       .catch((e) => console.error(e));
-  }, [commentEventFlag]);
+  }, [commentEventFlag, isLiked]);
 
-  const likeEventHandler = () => {};
+  const likeEventHandler = () => {
+    const url = `http://localhost:4000/post/likes/${postData.post.id}`;
+    if (isLiked) {
+      axios
+        .delete(url, { data: { user_id: userInfo.id } })
+        .then(setLiked(false))
+        .catch((e) => {
+          console.error(e);
+        });
+    } else {
+      axios
+        .post(url, { user_id: userInfo.id })
+        .then(setLiked(true))
+        .catch((e) => {
+          console.error(e);
+        });
+    }
+  };
 
   return (
     <Container
@@ -63,20 +88,25 @@ const Post = () => {
                 제목 : {postData.post.title}
               </Typography>
               <Typography variant="p">Likes : {postData.likes}</Typography>
+
               <Button onClick={likeEventHandler} variant="outlined">
-                좋아요
+                {isLiked ? "좋아요 취소" : "좋아요"}
               </Button>
-              <Button
-                component={Link}
-                to="/posts/form"
-                sx={{ mr: 3 }}
-                state={{
-                  post: postData.post,
-                }}
-                variant="outlined"
-              >
-                수정
-              </Button>
+              {postData.post.user_id === userInfo.id ? (
+                <Button
+                  component={Link}
+                  to="/posts/form"
+                  sx={{ mr: 3 }}
+                  state={{
+                    post: postData.post,
+                  }}
+                  variant="outlined"
+                >
+                  수정
+                </Button>
+              ) : (
+                <></>
+              )}
             </Stack>
             <Stack sx={{ mt: 1, padding: 3, height: 300 }}>
               <Typography sx={{ fontSize: 20 }}>
@@ -101,6 +131,7 @@ const Post = () => {
           </List>
         </Stack>
       )}
+      {userInfo === null && nav("/")}
     </Container>
   );
 };
