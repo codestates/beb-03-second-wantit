@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import PostItem from "./components/PostItem";
-import { Stack, Container, List } from "@mui/material";
+import { Stack, Container, List, Typography, Pagination } from "@mui/material";
 
 const Posts = () => {
   const userInfo = useSelector((state) => state.userReducer).data;

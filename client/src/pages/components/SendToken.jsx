@@ -7,56 +7,31 @@ import {
   Button,
   TextField,
   Typography,
-  Paper,
-  Modal,
 } from "@mui/material";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
+import { useSelector } from "react-redux";
 import axios from "axios";
-import Loading from "../Loading";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexDirection: "column",
-};
 
 function SendToken() {
-  const [userId, setUserId] = useState("admin");
   const [balance, setBalance] = useState("");
-  const [sender, setSender] = useState("user");
-  const [senderAddress, setSenderAddress] = useState("");
   const [recipient, setRecipient] = useState("");
   const [recipientAddress, setRecipientAddress] = useState("");
   const [amount, setAmount] = useState("");
-  const contractAddress = "0x144c9Cffe99C7D5FD3f314E8dA5fd267DAA356fF";
+  const contractAddress = "0x392975c1C62abBd2854ACc440E2313CcB9b14D0A";
   const [blockHash, setBlockHash] = useState("");
   const [transactionHash, setTransactionHash] = useState("");
-  const [open, setOpen] = React.useState(false);
   const [success, setSuccess] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const userInfo = useSelector((state) => state.userReducer).data;
 
   // 보유 토큰 조회 (이더 단위로 변경)
   const getBalance = () => {
     axios
       .post(`http://localhost:4000/contract/balanceOf`, {
-        user_id: "admin",
+        user_id: userInfo.user_id,
         contractAddress: contractAddress,
       })
       .then((payload) => {
-        handleOpen();
         setBalance(Number(payload.data.balance) / 10 ** 18);
       });
   };
@@ -65,18 +40,17 @@ function SendToken() {
   const transfer = () => {
     axios
       .post(`http://localhost:4000/contract/transfer`, {
-        sender: "admin",
+        sender: userInfo.user_id,
         recipient: recipient,
         amount: amount,
         contractAddress: contractAddress,
       })
       .then((payload) => {
-        handleOpen();
         setBlockHash(payload.data.contractaddress.blockHash);
         setTransactionHash(payload.data.contractaddress.transactionHash);
-        setSenderAddress(payload.data.contractaddress.from);
         setRecipientAddress(payload.data.contractaddress.to);
         setSuccess(true);
+        getBalance();
       });
   };
 
@@ -95,7 +69,7 @@ function SendToken() {
           sx={{
             mt: 2,
             height: "50%",
-            width: "30%",
+            width: "40%",
 
             borderRadius: 15,
             backgroundColor: "#e1dfdfd1",
@@ -134,7 +108,7 @@ function SendToken() {
           </Stack>
           <Button
             alignItems="center"
-            sx={{ height: 40, width: "90%", borderRadius: 2, mt: 7 }}
+            sx={{ height: 40, width: "80%", borderRadius: 2, mt: 7 }}
             variant="contained"
             onClick={() => {
               getBalance();
@@ -225,7 +199,7 @@ function SendToken() {
                 blockHash: {blockHash}
               </Box>
               <Box sx={{ textTransform: "uppercase", m: 1 }}>
-                from: {senderAddress}
+                from: {userInfo.address}
               </Box>
               <Box sx={{ textTransform: "uppercase", m: 1 }}>
                 to: {recipientAddress}

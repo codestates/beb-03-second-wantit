@@ -181,7 +181,10 @@ module.exports = {
       to: contractAddress,
       gas: 2000000,
       data: tokenContract.methods
-        .transfer(recipient.dataValues.address, amount)
+        .transfer(
+          recipient.dataValues.address,
+          web3.utils.toWei(amount, "ether")
+        )
         .encodeABI(),
     };
 
