@@ -30,20 +30,6 @@ function Mypage() {
 		setValue(newValue);
 	};
 
-	// user 정보 조회
-	/* 	useEffect(() => {
-		axios
-			.post(`http://localhost:4000/users/login`, {
-				user_id: userId,
-				password: password,
-			})
-			.then((res) => {
-				setUserId(res.data.data.user_id);
-				setAddress(res.data.data.address);
-			})
-			.catch((e) => console.error(e));
-	}, []); */
-
 	// 유저 포스트, 댓글 받기
 	useEffect(() => {
 		axios
