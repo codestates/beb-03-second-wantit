@@ -1,6 +1,16 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Stack, Container, Box, Button, Tab, Link } from "@mui/material";
+import {
+	Stack,
+	Container,
+	Box,
+	Button,
+	Tab,
+	Link,
+	ListItem,
+	ListItemAvatar,
+	Avatar,
+} from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import Post from "./Post";
@@ -14,6 +24,7 @@ function Mypage() {
 	const [post, setPost] = useState([]);
 	const [comment, setComment] = useState([]);
 	const [value, setValue] = React.useState("1"); //Tab 관련
+
 	// TabContext
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -48,13 +59,13 @@ function Mypage() {
 	return (
 		<Container
 			sx={{
-				mt: 3,
+				mt: 2,
 				mb: 3,
 				backgroundColor: "#fff",
 				borderRadius: 3,
 			}}
 		>
-			<Stack sx={{ height: 900 }}>
+			<Stack>
 				<Profile />
 				<TabContext value={value}>
 					<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -75,23 +86,27 @@ function Mypage() {
 					</TabPanel>
 					<TabPanel
 						value="2"
-						sx={{ width: "100%", bgcolor: "background.paper" }}
+						sx={{ width: "95%", bgcolor: "background.paper" }}
 					>
-						{/* {comment ? <Comments /> : "@userId님은 아직 남긴 글이 없습니다."} */}
-
-						{comment.map((comment) => (
-							<Comments
-								sx={{ width: "100%", bgcolor: "background.paper" }}
-								key={comment.id}
-								comment={comment}
-							/>
-						))}
+						{comment.length !== 0
+							? comment.map((comment) => (
+									<Comments
+										sx={{
+											width: "70%",
+											bgcolor: "background.paper",
+										}}
+										key={comment.id}
+										comment={comment}
+									/>
+							  ))
+							: "@userId님은 아직 남긴 글이 없습니다."}
 					</TabPanel>
 					<TabPanel value="3">
 						@userId님은 아직 가입한 커뮤니티가 없습니다.
 					</TabPanel>
 					<TabPanel value="4">확인하지 않은 알림이 없습니다.</TabPanel>
 					<TabPanel value="5">
+						{/* {transfer ? <SendToken /> : <TxDetail />} */}
 						<SendToken />
 					</TabPanel>
 				</TabContext>

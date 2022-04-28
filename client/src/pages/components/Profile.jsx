@@ -1,13 +1,20 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Stack, Container, Box, Button, TextField } from "@mui/material";
+import {
+	Stack,
+	Container,
+	Box,
+	Button,
+	TextField,
+	Typography,
+} from "@mui/material";
 import axios from "axios";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 function Profile() {
-	const [userId, setUserId] = useState("admin3");
-	const [password, setPassword] = useState("admin3");
+	const [userId, setUserId] = useState("admin");
+	const [password, setPassword] = useState("admin");
 	const [address, setAddress] = useState(undefined);
 
 	// user 정보 조회
@@ -44,14 +51,36 @@ function Profile() {
 				borderRadius: 3,
 			}}
 		>
-			<Stack sx={{ alignItems: "end" }}>
+			{/* <Stack sx={{ alignItems: "end", mr: -3 }}>
 				<SettingsIcon color="primary" />
 			</Stack>
 			<Stack sx={{ alignItems: "center" }}>
-				<AccountCircleIcon color="primary" sx={{ fontSize: 70 }} />
+				
 
 				<Stack sx={{ fontSize: 20, mt: 3 }}>{userId}</Stack>
 				<Stack sx={{ fontSize: 20, mt: 2, mb: 3 }}>{address}</Stack>
+			</Stack> */}
+			<Stack sx={{ alignItems: "end", mr: -3 }}>
+				<SettingsIcon color="primary" />
+			</Stack>
+			<Stack sx={{ alignItems: "center", justifyContent: "center" }}>
+				<Typography component="div" justifyContent="center">
+					<AccountCircleIcon color="primary" sx={{ fontSize: 70 }} />
+					<Box
+						display="flex"
+						justifyContent="center"
+						sx={{ textTransform: "lowercase", m: 1 }}
+					>
+						{userId}
+					</Box>
+					<Box
+						display="flex"
+						justifyContent="center"
+						sx={{ textTransform: "lowercase", m: 1 }}
+					>
+						{address}
+					</Box>
+				</Typography>
 			</Stack>
 		</Container>
 	);
