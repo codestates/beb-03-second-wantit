@@ -4,12 +4,15 @@ import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../modules/userReducer";
 
-export default function Login({ handleLogin }) {
+export default function Login() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [successLogin, setSuccessLogin] = useState(true);
 
+  const dispatch = useDispatch();
   const history = useNavigate();
 
   const login = () => {
@@ -20,7 +23,7 @@ export default function Login({ handleLogin }) {
       })
       .then((res) => {
         if (res.data.message === "login") {
-          handleLogin();
+          dispatch(setUser(res.data.data));
           setSuccessLogin(true);
           console.log("성공");
           history("/");

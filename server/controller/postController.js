@@ -60,17 +60,17 @@ module.exports = {
   findById: async (req, res) => {
     const id = req.params.id;
     const user_id = req.body.user_id;
-    console.log(user_id);
+    console.log(`📌️${user_id}`);
 
     try {
       const post = await Posts.findOne({ where: { id } });
-      // const isLiked = await Likes.count({ where: { user_id, post_id: id } });
+      const isLiked = await Likes.count({ where: { user_id, post_id: id } });
 
       if (post) {
         const comments = await post.getComments({});
         const likes = await post.getLikes({});
         res.status(200).send({
-          data: { comments, likes: likes.length, post },
+          data: { comments, likes: likes.length, post, isLiked },
           message: "ok",
         });
       } else {
