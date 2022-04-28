@@ -3,13 +3,21 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import { Container, Box, Stack, TextField, List, Button } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { setPostFlag } from "../modules/postUploadReducer";
 
 const PostForm = () => {
+  const userInfo = useSelector((state) => state.userReducer).data;
+  let postFlag = useSelector((state) => state.postUploadReducer).data;
+
   const loc = useLocation();
   const nav = useNavigate();
+  const dispatch = useDispatch();
+
   const [post, setPost] = useState(
     loc.state?.post || { title: "", body: "", user_id: 2 }
   );
+
   const onChangeHandler = (target) => {
     switch (target.id) {
       case "title":
@@ -30,7 +38,6 @@ const PostForm = () => {
       nav(`/post/${post.id}`);
     } else {
       const url = `http://localhost:4000/post`;
-      console.log(post);
       axios
         .post(url, {
           title: post.title,
@@ -40,7 +47,8 @@ const PostForm = () => {
         .catch((e) => {
           console.error(e);
         });
-      nav("/posts");
+      dispatch(setPostFlag(!postFlag));
+      nav("/*");
     }
   };
 
@@ -88,6 +96,7 @@ const PostForm = () => {
           </div>
         </Box>
       </Stack>
+      {userInfo === null && nav("/")}
     </Container>
   );
 };

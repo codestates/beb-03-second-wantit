@@ -2,14 +2,18 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { Box, Stack, TextField, Button } from "@mui/material";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
+  const userInfo = useSelector((state) => state.userReducer).data;
+  const nav = useNavigate();
   const [comment, setComment] = useState("");
 
   const onSubmitHandler = () => {
     axios
       .post("http://localhost:4000/post/comments", {
-        user_id: 2,
+        user_id: userInfo.id,
         post_id,
         content: comment,
       })
@@ -48,6 +52,7 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
           작성
         </Button>
       </Stack>
+      {userInfo === null && nav("/")}
     </Box>
   );
 };

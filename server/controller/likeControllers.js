@@ -6,6 +6,7 @@ module.exports = {
   like: async (req, res) => {
     const id = req.params.id;
     const { user_id } = req.body;
+
     try {
       const liked = await Likes.findOrCreate({
         where: {
@@ -36,6 +37,7 @@ module.exports = {
   deleteLike: async (req, res) => {
     const id = req.params.id;
     const { user_id } = req.body;
+
     const deleted = await Likes.destroy({
       include: [
         {

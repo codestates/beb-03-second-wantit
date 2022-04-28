@@ -4,6 +4,7 @@ const { transfer } = require("./transfer/transfer");
 module.exports = {
   comments: async (req, res) => {
     const { user_id, post_id, content } = req.body;
+    // console.log("📌️ comments 진입");
     try {
       await Comments.create({
         user_id,
