@@ -8,6 +8,7 @@ import {
   Stack,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const PostItem = (post) => {
   return (
@@ -49,7 +50,9 @@ const PostItem = (post) => {
               variant="body2"
               color="text.primary"
             >
-              {post.post.createdAt || new Date().toLocaleDateString()}
+              {post.post.createdAt
+                ? moment(post.post.createdAt).format("YYYY. M. DD.")
+                : new Date().toLocaleDateString()}
             </Typography>
           </Stack>
         }

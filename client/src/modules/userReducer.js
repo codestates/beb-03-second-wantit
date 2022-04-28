@@ -1,16 +1,12 @@
-import initialState from "./initialState";
-
-// Action
+// 액션
 const SET_USER = "SET_USER";
 const UNSET_USER = "UNSET_USER";
 
-// Action 생성 함수
-export const setUser = (userInfo) => {
+// 액션 생성 함수
+export const setUser = (data) => {
   return {
     type: SET_USER,
-    data: {
-      userInfo,
-    },
+    data,
   };
 };
 
@@ -20,20 +16,25 @@ export const unsetUser = () => {
   };
 };
 
-// Reducer
-function tokenReducer(state = initialState, action) {
+// 초기 상태
+const initialState = {
+  data: null,
+};
+
+// 리듀서 함수
+function userReducer(state = initialState, action) {
   switch (action.type) {
     case SET_USER:
       return {
-        token: action.data.accessToken,
+        data: action.data,
       };
     case UNSET_USER:
       return {
-        token: "",
+        data: null,
       };
     default:
       return state;
   }
 }
 
-export default tokenReducer;
+export default userReducer;

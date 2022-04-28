@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import PostItem from "./components/PostItem";
-import { Stack, Container, List, Typography } from "@mui/material";
-import Pagination from "@mui/material/Pagination";
+import { Stack, Container, List } from "@mui/material";
 
 const Posts = () => {
+  const userInfo = useSelector((state) => state.userReducer).data;
+  let postFlag = useSelector((state) => state.postUploadReducer).data;
+
   const [postList, setPostList] = useState([]);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * 11;
+
+  const nav = useNavigate();
 
   useEffect(() => {
     const url = "http://localhost:4000/post";
@@ -17,7 +23,7 @@ const Posts = () => {
         setPostList(payload.data.data);
       })
       .catch((e) => console.error(e));
-  }, []);
+  }, [postFlag]);
 
   const handlePage = (event, value) => {
     setPage(value);
@@ -47,6 +53,7 @@ const Posts = () => {
           onChange={handlePage}
         />
       </Stack>
+      {userInfo === null && nav("/")}
     </Container>
   );
 };

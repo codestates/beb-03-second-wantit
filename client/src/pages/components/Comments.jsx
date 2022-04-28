@@ -14,6 +14,8 @@ import {
   TextField,
   Stack,
 } from "@mui/material";
+import moment from "moment";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -30,6 +32,9 @@ const style = {
 const Comments = ({ comment, setCommentEventFlag, commentEventFlag }) => {
   const [openCommentEditModal, setOpenCommentEditModal] = useState(false);
   const [revisedComment, setRevisedComment] = useState(comment.content);
+
+  const userInfo = useSelector((state) => state.userReducer).data;
+
   const onSubmitHandler = () => {
     const url = `http://localhost:4000/post/comments/${comment.id}`;
     axios
@@ -48,28 +53,34 @@ const Comments = ({ comment, setCommentEventFlag, commentEventFlag }) => {
         <ListItemText
           primary={comment.content}
           secondary={
-            <>
+            <React.Fragment>
               <Typography
-                sx={{ display: "inline" }}
+                sx={{ display: "inline", mr: "1rem" }}
                 component="span"
                 variant="body2"
                 color="text.primary"
               >
                 {comment.user_id}
               </Typography>
-              {comment.createdAt || new Date().toLocaleDateString()}
-            </>
+              {comment.createdAt
+                ? moment(comment.createdAt).format("YYYY. M. DD.")
+                : new Date().toLocaleDateString()}
+            </React.Fragment>
           }
         />
-        <Button
-          onClick={() => {
-            setOpenCommentEditModal(true);
-          }}
-        >
-          수정
-        </Button>
+        {userInfo.id === comment.user_id ? (
+          <Button
+            onClick={() => {
+              setOpenCommentEditModal(true);
+            }}
+          >
+            수정
+          </Button>
+        ) : (
+          <></>
+        )}
       </ListItem>
-      <Divider variant="inset" component="li" />
+      <Divider variant="inset" />
       <Modal
         open={openCommentEditModal}
         aria-labelledby="modal-modal-title"
