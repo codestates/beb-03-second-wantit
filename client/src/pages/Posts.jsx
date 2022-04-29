@@ -5,15 +5,20 @@ import axios from "axios";
 import PostItem from "./components/PostItem";
 import { Stack, Container, List, Typography, Pagination } from "@mui/material";
 
-const Posts = () => {
+const Posts = ({ searchName }) => {
   const userInfo = useSelector((state) => state.userReducer).data;
   let postFlag = useSelector((state) => state.postUploadReducer).data;
-
   const [postList, setPostList] = useState([]);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * 11;
-
   const nav = useNavigate();
+  const filteredPostList = postList.filter((post) => {
+    if (searchName === "") {
+      return post;
+    } else {
+      return post.title.includes(searchName);
+    }
+  });
 
   useEffect(() => {
     const url = "http://localhost:4000/post";
@@ -36,7 +41,7 @@ const Posts = () => {
       </Stack>
       <Stack sx={{ width: "100%", height: "78vh" }}>
         <List sx={{ width: "100%" }}>
-          {postList.slice(offset, offset + 11).map((post) => (
+          {filteredPostList.slice(offset, offset + 11).map((post) => (
             <PostItem key={post.id} post={post} />
           ))}
         </List>
@@ -47,7 +52,11 @@ const Posts = () => {
         sx={{ height: "5vh", width: "100%" }}
       >
         <Pagination
-          count={postList.length <= 11 ? 1 : Math.ceil(postList.length / 11)}
+          count={
+            filteredPostList.length <= 11
+              ? 1
+              : Math.ceil(filteredPostList.length / 11)
+          }
           defaultPage={1}
           color="primary"
           onChange={handlePage}

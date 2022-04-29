@@ -10,13 +10,19 @@ import Footer from "./pages/components/Footer";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 function App() {
   const userInfo = useSelector((state) => state.userReducer).data;
+  const [searchName, setSearchName] = useState("");
+
+  const handleSearch = (v) => {
+    setSearchName(v);
+  };
 
   return (
     <>
-      <Header />
+      <Header handleSearch={handleSearch} />
       <Stack
         sx={{
           height: "auto",
@@ -25,7 +31,10 @@ function App() {
         }}
       >
         <Routes>
-          <Route path="/*" element={userInfo ? <Posts /> : <Main />} />
+          <Route
+            path="/*"
+            element={userInfo ? <Posts searchName={searchName} /> : <Main />}
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/post/:id" element={userInfo ? <Post /> : <Main />} />

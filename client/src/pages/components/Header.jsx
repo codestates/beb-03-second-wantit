@@ -13,10 +13,10 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { unsetUser } from "../../modules/userReducer";
 
-const Header = () => {
+const Header = ({ handleSearch }) => {
   const userInfo = useSelector((state) => state.userReducer).data;
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [searchName, setSearchName] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+
   const dispatch = useDispatch();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -70,7 +70,7 @@ const Header = () => {
             ),
           }}
           variant="filled"
-          onChange={(e) => setSearchName(e.target.value)}
+          onChange={(e) => handleSearch(e.target.value)}
         />
       </Stack>
       <Stack
