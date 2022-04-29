@@ -5,6 +5,7 @@ import axios from "axios";
 import { Container, Stack, List, Button, Typography } from "@mui/material";
 import Comments from "./components/Comments";
 import CommentsForm from "./components/CommentsForm";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import Loading from "./Loading";
 import Pagination from "@mui/material/Pagination";
 import { useSelector } from "react-redux";
@@ -18,8 +19,6 @@ const Post = () => {
   const offset = (page - 1) * 5;
   const [isLiked, setLiked] = useState();
   const userInfo = useSelector((state) => state.userReducer).data;
-
-  console.log(userInfo);
 
   const nav = useNavigate();
 
@@ -71,7 +70,7 @@ const Post = () => {
             component="form"
             sx={{
               backgroundColor: "#f1f1f1",
-              height: 600,
+              height: 550,
               borderRadius: 2,
               width: "100%",
               mt: 2,
@@ -95,33 +94,46 @@ const Post = () => {
               <Typography variant="h4" sx={{ ml: 3 }}>
                 제목 : {postData.post.title}
               </Typography>
-              <Typography variant="p">Likes : {postData.likes}</Typography>
-
-              <Button onClick={likeEventHandler} variant="outlined">
-                {isLiked ? "좋아요 취소" : "좋아요"}
-              </Button>
-              {postData.post.user_id === userInfo.id ? (
-                <Button
-                  component={Link}
-                  to="/posts/form"
-                  sx={{ mr: 3 }}
-                  state={{
-                    post: postData.post,
-                  }}
-                  variant="outlined"
-                >
-                  수정
+              <Stack direction="row">
+                <Button onClick={likeEventHandler}>
+                  {isLiked ? (
+                    <Stack>
+                      <FavoriteIcon sx={{ color: "red" }} />
+                    </Stack>
+                  ) : (
+                    <FavoriteIcon sx={{ color: "gray" }} />
+                  )}
                 </Button>
-              ) : (
-                <></>
-              )}
+                {postData.post.user_id === userInfo.id ? (
+                  <Button
+                    component={Link}
+                    to="/posts/form"
+                    sx={{ mr: 3, ml: 1, color: "black" }}
+                    state={{
+                      post: postData.post,
+                    }}
+                  >
+                    수정
+                  </Button>
+                ) : (
+                  <Button
+                    sx={{ mr: 3, ml: 3, color: "black" }}
+                    onClick={() => {
+                      window.alert("글 작성자만 수정 가능합니다.");
+                    }}
+                  >
+                    수정
+                  </Button>
+                )}
+              </Stack>
             </Stack>
-            <Stack sx={{ mt: 1, padding: 3, height: 300 }}>
+            <Stack sx={{ mt: 1, padding: 3, height: 200 }}>
               <Typography sx={{ fontSize: 20 }}>
                 {postData.post.body}
               </Typography>
             </Stack>
           </Stack>
+          <Typography variant="p">Likes : {postData.likes}</Typography>
           <CommentsForm
             post_id={postData.post.id}
             setCommentEventFlag={setCommentEventFlag}
@@ -164,7 +176,6 @@ const Post = () => {
           </Stack>
         </Stack>
       )}
-      {userInfo === null && nav("/")}
     </Container>
   );
 };

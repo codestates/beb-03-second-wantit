@@ -53,7 +53,6 @@ const Posts = () => {
           onChange={handlePage}
         />
       </Stack>
-      {userInfo === null && nav("/")}
     </Container>
   );
 };

@@ -33,20 +33,24 @@ const CommentsForm = ({ post_id, setCommentEventFlag, commentEventFlag }) => {
   const handleClose = () => setOpen(false);
 
   const onSubmitHandler = () => {
-    axios
-      .post("http://localhost:4000/post/comments", {
-        user_id: userInfo.id,
-        post_id,
-        content: comment,
-      })
-      .then((payload) => {
-        if (comment.length !== 0) {
-          handleOpen();
-        }
-      })
-      .catch((e) => console.error(e));
-    setCommentEventFlag(!commentEventFlag);
-    setComment("");
+    if (comment === "") {
+      window.alert("글을 작성 후 버튼을 눌러주세요");
+    } else {
+      axios
+        .post("http://localhost:4000/post/comments", {
+          user_id: userInfo.id,
+          post_id,
+          content: comment,
+        })
+        .then((payload) => {
+          if (comment.length !== 0) {
+            handleOpen();
+          }
+        })
+        .catch((e) => console.error(e));
+      setCommentEventFlag(!commentEventFlag);
+      setComment("");
+    }
   };
 
   return (

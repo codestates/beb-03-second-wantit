@@ -85,7 +85,7 @@ function SendToken() {
             <Stack sx={{ ml: 3 }}>
               <Typography
                 sx={{
-                  color: "primary",
+                  color: "#3b5998",
                   fontSize: 25,
                   fontWeight: "bold",
                   textAlign: "end",
@@ -129,7 +129,7 @@ function SendToken() {
               boxShadow: "5px 5px 10px 5px gray",
             }}
           >
-            <Box sx={{ color: "primary", fontSize: 40, fontWeight: "bold" }}>
+            <Box sx={{ color: "#3b5998", fontSize: 40, fontWeight: "bold" }}>
               Transfer
             </Box>
             <Stack spacing={3} sx={{ mt: 10, width: "80%" }}>

@@ -26,6 +26,7 @@ export default function Login() {
           dispatch(setUser(res.data.data));
           setSuccessLogin(true);
           console.log("성공");
+          window.alert("1 wantit 토큰 지급");
           history("/");
         }
       })
@@ -33,6 +34,12 @@ export default function Login() {
         console.log(e);
         setSuccessLogin(false);
       });
+  };
+
+  const handleEnter = (e) => {
+    if (e.key === "Enter") {
+      login();
+    }
   };
 
   return (
@@ -97,6 +104,7 @@ export default function Login() {
                 type="password"
                 variant="outlined"
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => handleEnter(e)}
               />
               <Button
                 sx={{ height: 55, borderRadius: 2 }}
