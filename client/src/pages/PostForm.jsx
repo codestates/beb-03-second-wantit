@@ -37,13 +37,12 @@ const PostForm = () => {
 			});
 			nav(`/post/${post.id}`);
 		} else {
-			console.log("@@@@@@", userInfo.id);
 			const url = `http://localhost:4000/post`;
 			axios
 				.post(url, {
 					title: post.title,
 					body: post.body,
-					user_id: userInfo.id,
+					user_id: post.user_id,
 				})
 				.catch((e) => {
 					console.error(e);
