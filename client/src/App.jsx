@@ -28,9 +28,12 @@ function App() {
           <Route path="/*" element={userInfo ? <Posts /> : <Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/post/:id" element={<Post />} />
-          <Route path="/posts/form" element={<PostForm />} />
-          <Route path="/mypage" element={<Mypage />} />
+          <Route path="/post/:id" element={userInfo ? <Post /> : <Main />} />
+          <Route
+            path="/posts/form"
+            element={userInfo ? <PostForm /> : <Main />}
+          />
+          <Route path="/mypage" element={userInfo ? <Mypage /> : <Main />} />
         </Routes>
       </Stack>
 
