@@ -15,9 +15,9 @@ import axios from "axios";
 
 function SendToken() {
   const [balance, setBalance] = useState("");
-  const [recipient, setRecipient] = useState("");
+  const [recipient, setRecipient] = useState(undefined);
   const [recipientAddress, setRecipientAddress] = useState("");
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(undefined);
   const contractAddress = "0x392975c1C62abBd2854ACc440E2313CcB9b14D0A";
   const [blockHash, setBlockHash] = useState("");
   const [transactionHash, setTransactionHash] = useState("");
@@ -38,20 +38,24 @@ function SendToken() {
 
   // 토큰 전송 // 보유잔액 새로 렌더되기
   const transfer = () => {
-    axios
-      .post(`http://localhost:4000/contract/transfer`, {
-        sender: userInfo.user_id,
-        recipient: recipient,
-        amount: amount,
-        contractAddress: contractAddress,
-      })
-      .then((payload) => {
-        setBlockHash(payload.data.contractaddress.blockHash);
-        setTransactionHash(payload.data.contractaddress.transactionHash);
-        setRecipientAddress(payload.data.contractaddress.to);
-        setSuccess(true);
-        getBalance();
-      });
+    if (recipient !== undefined && amount !== undefined) {
+      axios
+        .post(`http://localhost:4000/contract/transfer`, {
+          sender: userInfo.user_id,
+          recipient: recipient,
+          amount: amount,
+          contractAddress: contractAddress,
+        })
+        .then((payload) => {
+          setBlockHash(payload.data.contractaddress.blockHash);
+          setTransactionHash(payload.data.contractaddress.transactionHash);
+          setRecipientAddress(payload.data.recipient);
+          setSuccess(true);
+          getBalance();
+        });
+    } else {
+      window.alert("송금 정보를 정확히 입력하세요.");
+    }
   };
 
   return (

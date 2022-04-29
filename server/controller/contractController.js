@@ -202,6 +202,7 @@ module.exports = {
       res.status(200).send({
         message: "Transfer token Successfully",
         contractaddress: createReceipt,
+        recipient: recipient.dataValues.address,
       });
     } else {
       res.status(502).send({ message: "Failed to transfer" });

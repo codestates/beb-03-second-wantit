@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { Stack, Container, Box, Tab } from "@mui/material";
+import { Stack, Container, Box, Tab, Pagination, List } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Profile from "./components/Profile";
 import SendToken from "./components/SendToken";
@@ -9,11 +9,14 @@ import axios from "axios";
 import PostItem from "./components/PostItem";
 import { useSelector } from "react-redux";
 
-function Mypage() {
+const Mypage = () => {
   const [post, setPost] = useState([]);
   const [comment, setComment] = useState([]);
   const [value, setValue] = React.useState("1"); //Tab 관련
   const userInfo = useSelector((state) => state.userReducer).data;
+  const [commentEventFlag, setCommentEventFlag] = useState(false);
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * 5;
 
   // TabContext
   const handleChange = (event, newValue) => {
@@ -26,11 +29,14 @@ function Mypage() {
       .get(`http://localhost:4000/users/findById?user_id=${userInfo.user_id}`)
       .then((payload) => {
         setPost(payload.data.data.posts);
-        console.log(post);
         setComment(payload.data.data.comments);
       })
       .catch((e) => console.error(e));
-  }, []);
+  }, [commentEventFlag]);
+
+  const handlePage = (event, value) => {
+    setPage(value);
+  };
 
   return (
     <Container
@@ -54,29 +60,67 @@ function Mypage() {
             </TabList>
           </Box>
           <TabPanel value="1">
-            {post.length !== 0 ? (
-              post.map((post) => <PostItem key={post.id} post={post} />)
-            ) : (
-              <Stack>@userId님은 아직 남긴 글이 없습니다.</Stack>
-            )}
+            <List sx={{ width: "100%" }}>
+              {post.length !== 0 ? (
+                post
+                  .slice(offset, offset + 5)
+                  .map((item) => <PostItem key={item.id} post={item} />)
+              ) : (
+                <Stack>@userId님은 아직 남긴 글이 없습니다.</Stack>
+              )}
+            </List>
+
+            <Stack
+              alignItems="center"
+              justifyContent="center"
+              sx={{ height: "5vh", width: "100%" }}
+            >
+              <Pagination
+                count={post.length <= 5 ? 1 : Math.ceil(post.length / 5)}
+                defaultPage={1}
+                color="primary"
+                onChange={handlePage}
+              />
+            </Stack>
           </TabPanel>
+
           <TabPanel
             value="2"
             sx={{ width: "95%", bgcolor: "background.paper" }}
           >
-            {comment.length !== 0
-              ? comment.map((comment) => (
+            <List sx={{ width: "100%" }}>
+              {comment.length !== 0 ? (
+                comment.slice(offset, offset + 5).map((item) => (
                   <Comments
                     sx={{
                       width: "70%",
                       bgcolor: "background.paper",
                     }}
-                    key={comment.id}
-                    comment={comment}
+                    key={item.id}
+                    comment={item}
+                    setCommentEventFlag={setCommentEventFlag}
+                    commentEventFlag={commentEventFlag}
                   />
                 ))
-              : "@userId님은 아직 남긴 글이 없습니다."}
+              ) : (
+                <Stack>@userId님은 아직 남긴 글이 없습니다.</Stack>
+              )}
+            </List>
+
+            <Stack
+              alignItems="center"
+              justifyContent="center"
+              sx={{ height: "5vh", width: "100%" }}
+            >
+              <Pagination
+                count={comment.length <= 5 ? 1 : Math.ceil(comment.length / 5)}
+                defaultPage={1}
+                color="primary"
+                onChange={handlePage}
+              />
+            </Stack>
           </TabPanel>
+
           <TabPanel value="3">
             @userId님은 아직 가입한 커뮤니티가 없습니다.
           </TabPanel>
@@ -88,6 +132,6 @@ function Mypage() {
       </Stack>
     </Container>
   );
-}
+};
 
 export default Mypage;
