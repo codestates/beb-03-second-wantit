@@ -1,4 +1,5 @@
-const { Posts } = require("../models");
+const { Users, Posts, Likes } = require("../models");
+const { transfer } = require("./transfer/transfer");
 
 module.exports = {
   //게시글 작성 핸들러
@@ -6,6 +7,9 @@ module.exports = {
     const title = req.body.title;
     const body = req.body.body;
     const user_id = req.body.user_id;
+    console.log(title);
+    console.log(body);
+    console.log(user_id);
     try {
       const writepost = await Posts.create({
         title,
@@ -13,9 +17,14 @@ module.exports = {
         user_id,
       });
       if (writepost) {
+        const recipient = await Users.findOne({
+          where: { id: user_id },
+          attributes: ["address"],
+        });
+        transfer(recipient.dataValues.address);
         res.status(201).send({ message: "Success write post" });
       } else {
-        res.status(400).send({ message: "no" });
+        res.status(400).send({ message: "Failed to write Post" });
       }
     } catch (e) {
       res.status(500).send({ message: "Failed to write Post" });
@@ -50,15 +59,20 @@ module.exports = {
   //특정 게시물 조회
   findById: async (req, res) => {
     const id = req.params.id;
+    const user_id = req.body.user_id;
+    console.log(`📌️${user_id}`);
 
     try {
       const post = await Posts.findOne({ where: { id } });
+      const isLiked = await Likes.count({ where: { user_id, post_id: id } });
+
       if (post) {
         const comments = await post.getComments({});
         const likes = await post.getLikes({});
-        res
-          .status(200)
-          .send({ data: { comments, likes: likes.length }, message: "ok" });
+        res.status(200).send({
+          data: { comments, likes: likes.length, post, isLiked },
+          message: "ok",
+        });
       } else {
         res.status(404).send({ message: "No post are found" });
       }
